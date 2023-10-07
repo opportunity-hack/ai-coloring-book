@@ -1,0 +1,35 @@
+:root{
+  --product-color: #13003f;
+  --orange-theme-color: #fe7024;
+  --orange-text-theme-color: #fc7124;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: var(--font-family);
+}
+
+
+@media (max-width: 1120px) {
+  html{
+        font-size: 85%;
+  }
+}
+@media(max-width: 998px) {
+    html{
+        font-size: 75%;
+    }
+}
+@media(max-width: 768px) {
+    html{
+        font-size: 65%;
+    }
+}
+@media(max-width: 600px) {
+    html{
+        font-size: 50%;
+    }
+}
+
