@@ -15,25 +15,25 @@ class Drawings(models.Model):
     created_by = models.CharField(max_length=20, null=True)
     creative_url = models.TextField(null=True)
     is_active = models.BooleanField(null=True)
-    created_on = models.DateTimeField(null=True)
-    modified_on = models.DateTimeField(null=True)
+    created_on = models.DateTimeField(null=True, auto_now_add=True)
+    modified_on = models.DateTimeField(null=True, auto_now_add=True)
 
     class Meta:
         db_table = "drawings"
 
-#
-# class NonProfits(models.Model):
-#     id = models.AutoField(primary_key=True)
-#     name = models.CharField(max_length=20, null=True)
-#     about = models.TextField(null=True)
-#     url = models.TextField(null=True)
-#     created_on = models.DateTimeField(null=True)
-#     modified_on = models.DateTimeField(null=True)
-#
-#     class Meta:
-#         db_table = "nonprofits"
-#
-#
+
+class NonProfits(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=20, null=True)
+    about = models.TextField(null=True)
+    url = models.TextField(null=True)
+    created_on = models.DateTimeField(null=True, auto_now_add=True)
+    modified_on = models.DateTimeField(null=True, auto_now_add=True)
+
+    class Meta:
+        db_table = "nonprofits"
+
+
 # class Sponsors(models.Model):
 #     id = models.AutoField(primary_key=True)
 #     name = models.CharField(max_length=20, null=True)
