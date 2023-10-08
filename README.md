@@ -51,7 +51,7 @@ The cloud solution includes:
 
 
 ## Accomplishments that we're proud of
-We are quite proud that our whole system is online, from frontend to all they to the backend, storage and models. This is the first time any of our team members has done this.
+We are quite proud that our whole system is online, from the frontend all the way to the backend, storage, and models. This is the first time any of our team members have done this.
 
 ## What we learned
 We learned how to use the S3 buckets to store data over the cloud, which none of our team members had done before. We also explored the Replicate API for the first time.
@@ -59,4 +59,4 @@ We learned how to use the S3 buckets to store data over the cloud, which none of
 ## What's next for the project
 Future deployments of the **From Sketches to Smiles Project** could include proper payment gateways for the business to buy ad spaces and more customization of the final book pdfs, including placements of advertisements, sorting of pages, and textual blogs. Another much larger feature would be to build a small mobile app that schools can directly use to scan kids' drawings and upload them to the server.
 
-### References
+
