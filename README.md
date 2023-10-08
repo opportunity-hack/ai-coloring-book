@@ -25,23 +25,31 @@ Our solution empowers you to harness the creativity of young artists while suppo
 
 
 ## How we built it
-The backend solution for **Zuri's Dashboard** includes:
-- ASP.NET Core 3.0
-- ML.NET
-- MongoDB
-- Json Web Tokens
-- Google OAuth 2.0
-- Twilio / SendGrid
+Here's an overview of the components used:
 
-The frontend solution for **Zuri's Dashboard** includes:
-- React
-- Redux
-- Material UI
-- Chart.js
+### Backend Solution
+- **Technology Stack**:
+  - [Backend Framework]: Django
+- **Storage Solution**:
+  - AWS S3 Bucket
 
-The cloud solution for **Zuri's Dashboard** is:
-- Azure for the WebApp
-- Heroku for the MongoDB database
+### Machine Learning Model
+- **Model for Scribble to Sketch Conversion**:
+  - ControlNet (Modified Diffusion Model)
+- **Model Hosting Platform**:
+  - Replicate
+
+### Frontend Solution
+- **Technology Stack**:
+  - Frontend Framework: Next.js
+
+### Cloud Solution
+- **Web Application Hosting**:
+  - AWS EC2
+- **Database Hosting**:
+  - PostgreSQL
+
+
 
 ## Challenges we ran into
 One unfortunate challenge we ran into was the inability to successfully deploy a Docker image of our WebApp because of the lack of Docker documentation as well as version/incompatibility issues with .NET Core 3.0 (due to the framework being quite new at the time of this submission).
