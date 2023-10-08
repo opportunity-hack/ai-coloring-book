@@ -1,0 +1,57 @@
+/* .buttonMain{
+    background-color: var(--orange-theme-color);
+    width: 20rem;
+    padding: 1rem;
+    text-align: center;
+    opacity: 1;
+    color: white;
+}
+
+.buttonMain:hover{
+    cursor: pointer;
+    background-color: black;
+}
+
+.buttonTitle{
+    font-size: 1.25rem;
+    font-weight: 800;
+    font-family: serif;
+} */
+
+.mainContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80vw;
+    height: 80vh;
+    border: 1px solid black;
+}
+
+.inquiryContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    
+}
+.column{
+    margin: 1rem;
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    gap: 3rem;
+
+}
+.formSection{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    border: 1px solid black;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
