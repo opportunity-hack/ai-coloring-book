@@ -1,31 +1,56 @@
+# From Sketches to Smiles: A Coloring Book that Gives Back
+## Inspiration
+The **From Sketches to Smiles Project** aims to create an exceptional coloring book by harnessing the creativity of children's sketches and the power of AI. Our mission extends beyond just producing amazing coloring books; we also have a strong commitment to giving back to our community, especially kids in need, through Susie Q's Kids Comfort Bag program.
 
-# 2023_fall Hackathon
-https://hack.ohack.dev
-## Team
-Caffeine Compilers
+Dr. Mary has observed that children are not only eager to give back but also have a deep affinity for drawing and coloring. They take pride in seeing their creations turned into a book, making it a cherished gift for their parents, relatives, and friends.
 
-## Slack Channel
-`#`[caffeine-compilers](https://opportunity-hack.slack.com/app_redirect?channel=caffeine-compilers)
 
-## Problem Statement
-[From Sketches to Smiles: A Coloring Book that Gives Back](https://ohack.dev/project/oWkMWbQ5IloAFC3FGfdP)
 
-## Creator
-@Darshan Vipresh Sheth (on Slack)
+## What it does
+Our solution offers a wide range of features and capabilities to bring kids' creativity to life. With this tool, you can:
 
-## Your next steps
-1. ✅ Add everyone to your GitHub repo like this: https://opportunity-hack.slack.com/archives/C1Q6YHXQU/p1605657678139600
-2. ✅ Create your DevPost project like this https://youtu.be/vCa7QFFthfU?si=bzMQ91d8j3ZkOD03
-3. ✅ ASU Students use https://opportunity-hack-2023-asu.devpost.com/
-4. ✅ Everyone else use https://opportunity-hack-2023-virtual.devpost.com/
-5. ✅ Your DevPost final submission demo video should be 3 minutes or less
-6. ✅ Review the judging criteria on DevPost
+- **Convert Sketches to Coloring Book Templates**: Transform rough sketches created by school children into coloring book templates.
 
-# What should your final Readme look like?
-Examples of stellar readmes:
-- ✨ [2019 Team 3](https://github.com/2019-Arizona-Opportunity-Hack/Team-3)
-- ✨ [2019 Team 6](https://github.com/2019-Arizona-Opportunity-Hack/Team-6)
-- ✨ [2020 Team 2](https://github.com/2020-opportunity-hack/Team-02)
-- ✨ [2020 Team 4](https://github.com/2020-opportunity-hack/Team-04)
-- ✨ [2020 Team 8](https://github.com/2020-opportunity-hack/Team-08)
-- ✨ [2020 Team 12](https://github.com/2020-opportunity-hack/Team-12)
+- **Generate Coloring Books**: Utilize these templates to effortlessly generate captivating coloring books.
+
+- **Ad Space for Businesses**: Enable businesses to purchase advertising space within the coloring book, supporting the printing and distribution of these books.
+
+- **Promote Nonprofit Organizations**: Use the coloring book as a platform to advertise and raise awareness for other nonprofit organizations.
+
+- **Digital and Print Versions**: Create both digital and print versions of the coloring book. This can include printing locally or uploading to online platforms like Amazon.
+
+- **Fundraising Capabilities**: Set up fundraising initiatives, allowing people to purchase either digital or print versions of the book, contributing to the cause.
+
+Our solution empowers you to harness the creativity of young artists while supporting local businesses, nonprofit organizations, and fundraising efforts in the process.
+
+
+## How we built it
+The backend solution for **Zuri's Dashboard** includes:
+- ASP.NET Core 3.0
+- ML.NET
+- MongoDB
+- Json Web Tokens
+- Google OAuth 2.0
+- Twilio / SendGrid
+
+The frontend solution for **Zuri's Dashboard** includes:
+- React
+- Redux
+- Material UI
+- Chart.js
+
+The cloud solution for **Zuri's Dashboard** is:
+- Azure for the WebApp
+- Heroku for the MongoDB database
+
+## Challenges we ran into
+One unfortunate challenge we ran into was the inability to successfully deploy a Docker image of our WebApp because of the lack of Docker documentation as well as version/incompatibility issues with .NET Core 3.0 (due to the framework being quite new at the time of this submission).
+
+## Accomplishments that we're proud of
+We are quite proud of our implementation of Machine Learning .NET (ML.NET) into this solution. To do this, we trained a supervised model with labeled data using a logistic regression algorithm to perform binary classification of sentiments. With our model, we were able to make accurate predictions on whether or not the feedback received from participants was positive or negative for analysis purposes; this also provided a "one-glance" view of whether or not an event was successful/positively received.
+
+## What we learned
+We learned how to incorporate Twilio / SendGrid into a .NET application, which none of our team members had done before. We also explored the React hooks API.
+
+## What's next for Zuri's Dashboard
+Future deployments of **Zuri's Dashboard** could include more customization for sending group emails to participants of an event, designated by their participant type (send just to donors, recipients, volunteers, etc.). Another much larger feature would be to analyze and label all feedback received from actual Zuri's Circle participants to train our machine learning model with for even more accurate predictions.
