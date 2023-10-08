@@ -1,0 +1,18 @@
+.buttonMain{
+    background-color: var(--orange-theme-color);
+    width: 20rem;
+    padding: 1rem;
+    text-align: center;
+    opacity: 1;
+    color: white;
+}
+
+.buttonMain:hover{
+    cursor: pointer;
+    background-color: black;
+}
+
+.buttonTitle{
+    font-size: 1.25rem;
+    font-weight: 800;
+}
