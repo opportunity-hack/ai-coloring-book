@@ -27,7 +27,31 @@ const Sponsor = () => {
 				{
 					id: 2,
 					name: "Book Title 2",
-					about: "Something about this book 101",
+					about: "Something about this book 102",
+					url: "https://opp-hack-asu.s3.amazonaws.com/pdf_uploads/book-2.pdf",
+					is_published: null,
+					created_on: "2023-10-08T04:14:14.632453Z",
+					modified_on: "2023-10-08T04:14:14.632487Z",
+					sponsors: [2, 3],
+					nonprofits: [2],
+					drawings: [1, 2, 3, 4],
+				},
+				{
+					id: 3,
+					name: "Book Title 3",
+					about: "Something about this book 103",
+					url: "https://opp-hack-asu.s3.amazonaws.com/pdf_uploads/book-2.pdf",
+					is_published: null,
+					created_on: "2023-10-08T04:14:14.632453Z",
+					modified_on: "2023-10-08T04:14:14.632487Z",
+					sponsors: [2, 3],
+					nonprofits: [2],
+					drawings: [1, 2, 3, 4],
+				},
+				{
+					id: 4,
+					name: "Book Title 4",
+					about: "Something about this book 104",
 					url: "https://opp-hack-asu.s3.amazonaws.com/pdf_uploads/book-2.pdf",
 					is_published: null,
 					created_on: "2023-10-08T04:14:14.632453Z",
@@ -108,7 +132,7 @@ const Sponsor = () => {
 	};
 
 	return (
-        <div className={styles.classMain}>
+		<div className={styles.classMain}>
 			<div className={styles.bookTemplateParent}>
 				{books.map((book) => (
 					<div key={book.id} className={styles.bookCards}>
