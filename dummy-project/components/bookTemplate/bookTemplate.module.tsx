@@ -9,8 +9,8 @@ const BookTemplate = (props: any) => {
 				<Image
 					src="/images/book-template-image.png"
 					alt="Your Image Alt Text"
-					width={70}
-					height={70}
+					width={150}
+					height={200}
 				/>
 			</div>
 			<div className={styles.generalPadding}>{props.description}</div>

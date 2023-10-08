@@ -7,7 +7,7 @@
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      font-size: 15px;
+      font-size: 16px;
     font-family: serif;
   }
 
@@ -36,4 +36,5 @@
 
   .bookTemplateParent{
     display: flex;
+    height: 350px;
   }

@@ -14,8 +14,8 @@ const Sponsor = () => {
 			results: [
 				{
 					id: 1,
-					name: "book-1",
-					about: "htis book is about something",
+					name: "Book Title 1",
+					about: "Something about this book 101",
 					url: null,
 					is_published: null,
 					created_on: "2023-10-08T01:31:31.196001Z",
@@ -26,8 +26,8 @@ const Sponsor = () => {
 				},
 				{
 					id: 2,
-					name: "book-2",
-					about: "htis book is about something",
+					name: "Book Title 2",
+					about: "Something about this book 101",
 					url: "https://opp-hack-asu.s3.amazonaws.com/pdf_uploads/book-2.pdf",
 					is_published: null,
 					created_on: "2023-10-08T04:14:14.632453Z",
@@ -42,12 +42,12 @@ const Sponsor = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await fetch("http://204.236.243.72:8000/api/books"); // Replace with your API endpoint
-				// response = getResponse();
+				// const response = await fetch("http://204.236.243.72:8000/api/books"); // Replace with your API endpoint
+				response = getResponse();
 				if (response.ok) {
-					const data = await response.json();
-					setBooks(data.results); // Assuming your response structure has a "sponsors" array
-					// setBooks(response.results);
+					// const data = await response.json();
+					// setBooks(data.results); // Assuming your response structure has a "sponsors" array
+					setBooks(response.results);
 				} else {
 					console.error("Failed to fetch sponsors");
 				}
@@ -108,7 +108,7 @@ const Sponsor = () => {
 	};
 
 	return (
-		<div className={styles.classMain}>
+        <div className={styles.classMain}>
 			<div className={styles.bookTemplateParent}>
 				{books.map((book) => (
 					<div key={book.id} className={styles.bookCards}>
