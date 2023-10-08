@@ -37,7 +37,7 @@
     width: 100%;
     padding: 8px;
     font-size: 14px;
-    border: 1px solid #ccc;
+    border: 1px solid #beb2b2;
     border-radius: 4px;
   }
   
@@ -45,7 +45,7 @@
     margin-top: 15px;
     width: 100px;
     padding: 10px 16px;
-    background-color: #4caf50;
+    background-color: hsl(120, 8%, 46%);
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -59,8 +59,8 @@
   
   .dashedRectangle {
     width: 600px;
-    height: 400px;
+    height: 250px;
     border-radius: 10px;
-    border: 2px dashed #3498db; /* Change color as needed */
+    border: 2px dashed hwb(210 62% 34%); /* Change color as needed */
     margin-top: 20px;
   }
