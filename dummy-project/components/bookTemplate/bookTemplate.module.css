@@ -1,0 +1,16 @@
+.template{
+    width: 200px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.generalPadding{
+    margin-top: 5px;
+    margin-bottom: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-family: serif;
+    font-size: 16px;
+    font-weight: 300;
+}

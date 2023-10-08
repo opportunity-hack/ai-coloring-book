@@ -1,0 +1,9 @@
+.headerStyle {
+    padding-bottom: 20px;
+    padding-top: 20px;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+}

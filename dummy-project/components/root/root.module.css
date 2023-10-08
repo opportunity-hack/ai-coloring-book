@@ -1,0 +1,43 @@
+.mainContainer{
+    height: 70vh;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+
+.topBar{
+    width: 100vw;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    /* justify-content: right; */
+    background-color: gainsboro;
+}
+.logout{
+    margin-right: 1rem;
+    margin-left: auto;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: 500;
+}
+.logout:hover{
+    color: blue;
+}
+
+.Menu{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 10rem;
+}
+.backBtn{
+    font-size: 2.6rem;
+    font-family: serif;
+    margin-left: 1rem;
+    float: left;
+    cursor: pointer;
+}
+/* .backBtn:hover{
+    color: white;
+} */

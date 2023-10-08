@@ -1,0 +1,70 @@
+.mainFormContainer{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    width: 30rem;
+    margin-top: 4rem;
+}
+.FormGreetings{
+    width: 100%;
+}
+
+.welcomeTitle{
+    font-size: 2.5rem;
+    color: black;
+    font-family: serif;
+    font-weight: 500;
+    text-align:  center;
+}
+.subTitle{
+    font-size: 2rem;
+    font-family: serif;
+}
+.actualForm{
+    width: 100%;
+    /* background-color: turquoise; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.3rem;
+}
+.formGroup{
+    width: 100%;
+    display: flex;
+    gap: 1.3rem;
+}
+.formGroupItem{
+    width: 50%;
+}
+.inputItem{
+    height: 2.5rem;
+    font-size: 1rem;
+    padding: .5rem;
+}
+.submitBtn{
+    width: 100%;
+}
+.verifyAadhaarComponent{
+    display: flex;
+    gap: 0rem;
+}
+.aadhaarInput{
+    width: 70%;
+}
+.verifyAadhaarBtn{
+    border: 1px solid hsl(120, 8%, 46%);
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    color: hsl(120, 8%, 46%);
+    font-weight: 800;
+    font-size: .8rem;
+    cursor: pointer;
+    transition: background-color .1s ease-in;
+}

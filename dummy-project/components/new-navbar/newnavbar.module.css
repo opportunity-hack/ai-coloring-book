@@ -1,0 +1,11 @@
+.mainNavContainer{
+    width: 100%;
+    height: 8vh;
+    background-color: black;
+    color: black;
+    z-index: 11;
+    position: sticky;
+    top: 0;
+    font-size: 1.2rem;
+    position: absolute;
+}

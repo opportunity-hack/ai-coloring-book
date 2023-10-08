@@ -1,0 +1,40 @@
+  .button {
+      margin-top: 15px;
+      width: 100px;
+      padding: 10px 16px;
+      background-color: hsl(120, 8%, 46%);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-family: serif;
+  }
+
+  .button:hover {
+    background-color: #45a049;
+  }
+
+  .bookCards {
+      display: flex;
+      margin: 15px;
+  }
+
+  .selectedCard{
+    border-width: 5px;
+    border-color: aquamarine;
+  }
+
+  .classMain {
+    width: 100%;
+    height: 40vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bookTemplateParent{
+    display: flex;
+    height: 350px;
+  }

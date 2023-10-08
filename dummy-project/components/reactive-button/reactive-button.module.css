@@ -1,0 +1,21 @@
+.buttonMain{
+    background-color: hsl(120, 8%, 46%);
+    width: 20rem;
+    padding: 1rem;
+    text-align: center;
+    opacity: 1;
+    color: white;
+     transition: 0.3s;
+     border-radius: 10px;
+}
+
+.buttonMain:hover{
+    cursor: pointer;
+    background-color: #45a049;
+}
+
+.buttonTitle{
+    font-size: 1.25rem;
+    font-weight: 800;
+    font-family: serif;
+}
