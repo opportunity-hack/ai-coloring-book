@@ -26,28 +26,18 @@ Our solution empowers you to harness the creativity of young artists while suppo
 
 ## How we built it
 Here's an overview of the components used:
+The backend solution includes:
+- Django
+- PostgresSQL
+- Model to convert scribbles to sketches: ControlNet (Modified Diffusion Model)
+- Model hosting platform: Replicate
 
-### Backend Solution
-- **Technology Stack**:
-  - [Backend Framework]: Django
-- **Storage Solution**:
-  - AWS S3 Bucket
+The frontend solution includes:
+- Next.js
 
-### Machine Learning Model
-- **Model for Scribble to Sketch Conversion**:
-  - ControlNet (Modified Diffusion Model)
-- **Model Hosting Platform**:
-  - Replicate
-
-### Frontend Solution
-- **Technology Stack**:
-  - Frontend Framework: Next.js
-
-### Cloud Solution
-- **Web Application Hosting**:
-  - AWS EC2
-- **Database Hosting**:
-  - PostgreSQL
+The cloud solution includes:
+- AWS S3 Bucket
+- AWS EC2
 
 
 
