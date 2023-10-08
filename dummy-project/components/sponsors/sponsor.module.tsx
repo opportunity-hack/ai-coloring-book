@@ -6,10 +6,10 @@ const SponsorCRUD = (props: any) => {
   return (
     <>
       <div className={`${style.mainContainer}`}>
-            <div className={`${style.inquiryContainer}`}>
-              <h2 className={style.header}>{"Organization"}</h2>
-              <div className={`${style.formSection}`}>
-            <div className={style.column}>
+        <div className={`${style.inquiryContainer}`}>
+          <h2 className={style.header}>{"Organization"}</h2>
+          <div className={`${style.formSection}`}>
+              <div className={style.column}>
                 <input type="text" name="Organization" placeholder="Organization" className={style.rowItem}
                   value={props.formValue.firstName} 
                   onChange={props.setFormValueMethod}
@@ -23,14 +23,14 @@ const SponsorCRUD = (props: any) => {
                 <input type="text" name="Logo" placeholder="Logo" className={style.rowItem} />
                 <input type="text" name="URL" placeholder="Website" className={style.rowItem} />
               </div>
-        
               <ReactiveButton
-                title="Submit"
-                onClick={props.onChange}
-              />
-              </div>
-            </div>
+                  title="Submit"
+                  onClick={props.onChange}
+                />
           </div>
+        </div>
+        
+      </div>
     </>
   )
 }

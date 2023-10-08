@@ -7,11 +7,12 @@ import Sponsor from "@/components/Sponsor/sponsor.module";
 import Header from "@/components/header/header.module";
 import Footer from "@/components/footer/footer.module";
 import Login from "@/components/login/login.module";
-import { getNonProfits, getSponsors, postLoginCredentials, postSponsors } from "@/hooks/api";
+import { getDrawings, getNonProfits, getSponsors, postLoginCredentials, postSponsors } from "@/hooks/api";
 import styles from "./root.module.css"
 import ReactiveButton from "../reactive-button/reactive-button.module";
 import Upload from "../upload/upload.module";
 import SponsorCRUD from "../sponsors/sponsor.module";
+import PdfViewer from "../PdfViewer/pdfviewer.module";
 
 const Root = () => {
   const [formValue, setFormValue] = useState(
@@ -142,6 +143,12 @@ const Root = () => {
     console.log("getting token from local storage", );
   }, []);
 
+  const createBook = () => {
+    let drawingIds = getDrawings()
+
+    
+  }
+
   // useEffect(() => {
   //   getNonProfits(token)
   //   .then((banks) => {
@@ -154,7 +161,7 @@ const Root = () => {
   let page = [
     "",
     <Upload />,
-    "",
+    <PdfViewer/>,
     <SponsorCRUD setFormValueMethod={setFormValueMethod} formValue={formValue} onChange={submitOrganization}/>,
     ""
   ]
@@ -188,12 +195,6 @@ const Root = () => {
               
             </> : <Sponsor></Sponsor>
         }
-         
-
-       
-            
-            
-
           </div>
                 }
         </div>

@@ -37,7 +37,7 @@ const Upload: React.FC = () => {
 		formData.append("subject", textFields.field3);
 
 		try {
-			const response = await fetch("/api/drawings", {
+			const response = await fetch("http://204.236.243.72:8000/api/drawings/", {
 				method: "POST",
 				body: formData,
 			});

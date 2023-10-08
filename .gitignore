@@ -301,3 +301,20 @@ GitHub.sublime-settings
 
 *.pyc
 *.pyc
+*.pack
+*.pack
+dummy-project/.next/cache/webpack/server-development/10.pack
+dummy-project/.next/cache/webpack/server-development/0.pack
+dummy-project/.next/cache/webpack/server-development/1.pack
+dummy-project/.next/cache/webpack/server-development/10.pack
+dummy-project/.next/cache/webpack/server-development/11.pack
+dummy-project/.next/cache/webpack/server-development/2.pack
+dummy-project/.next/cache/webpack/server-development/3.pack
+dummy-project/.next/cache/webpack/server-development/4.pack
+dummy-project/.next/cache/webpack/server-development/5.pack
+dummy-project/.next/cache/webpack/server-development/6.pack
+dummy-project/.next/cache/webpack/server-development/7.pack
+dummy-project/.next/cache/webpack/server-development/8.pack
+dummy-project/.next/cache/webpack/server-development/9.pack
+node_modules
+node_modules

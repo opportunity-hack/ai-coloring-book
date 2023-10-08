@@ -15,7 +15,9 @@ export const postLoginCredentials = async (loginData: any) => {
         method: "post",
         url: URL,
         timeout: 1000 * 5,
-        headers: {},
+        headers: {
+            "Accept": "application/json",
+        },
         data: data,
         params: {}
     })
@@ -161,3 +163,19 @@ export const postSponsors = async (Formdata: any) => {
   return res.data;
   // return "token";
 }
+
+
+export const getDrawings = async () => {
+    const URL = `${baseURL}/drawings`;
+    let response = await axios.get(
+        URL,
+        {
+        params: {},
+        headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': 'http://localhost:3000', 'Access-Control-Allow-Credentials': 'true'}
+        }
+    );
+    console.log("response.data.responseData", response.data)
+    return response.data;
+  // return "token";
+}
+

@@ -1,0 +1,19 @@
+.pdfContainer{
+
+    width: 100vw;
+    /* border: 2px solid black; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: -1rem;
+}
+
+.title{
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: serif;
+    margin-top: 2rem;
+    margin-top: 2rem;
+}

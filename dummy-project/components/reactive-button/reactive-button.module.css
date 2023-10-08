@@ -5,6 +5,8 @@
     text-align: center;
     opacity: 1;
     color: white;
+     transition: 0.3s;
+     border-radius: 10px;
 }
 
 .buttonMain:hover{
