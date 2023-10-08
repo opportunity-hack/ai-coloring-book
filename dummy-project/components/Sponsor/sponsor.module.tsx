@@ -93,8 +93,10 @@ const Sponsor = () => {
 			<div className={styles.bookTemplateParent}>
 				{books.map((book) => (
 					<div key={book.id} className={styles.bookCards}>
-						<button onClick={() => handleSelect(book.id)}>
-							{selectedBooks.includes(book.id) ? "Deselect" : "Select"}
+                        <button
+                            onClick={() => handleSelect(book.id)}
+                            className={selectedBooks.includes(book.id) ? styles.selectedCard : ""}
+                        >
 							<BookTemplate name={book.name} description={book.about} />
 						</button>
 						{/* {book.name} 

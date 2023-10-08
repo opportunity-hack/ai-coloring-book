@@ -19,12 +19,17 @@
       margin: 15px;
   }
 
+  .selectedCard{
+    border-width: 5px;
+    border-color: aquamarine;
+  }
+
   .classMain {
     width: 100%;
-      padding-bottom: 20px;
-      padding-top: 20px;
-      align-items: center;
-      justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
   .bookTemplateParent{
