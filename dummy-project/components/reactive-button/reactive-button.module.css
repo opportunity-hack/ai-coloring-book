@@ -1,5 +1,5 @@
 .buttonMain{
-    background-color: var(--orange-theme-color);
+    background-color: hsl(120, 8%, 46%);
     width: 20rem;
     padding: 1rem;
     text-align: center;
@@ -9,10 +9,11 @@
 
 .buttonMain:hover{
     cursor: pointer;
-    background-color: black;
+    background-color: #45a049;
 }
 
 .buttonTitle{
     font-size: 1.25rem;
     font-weight: 800;
+    font-family: serif;
 }

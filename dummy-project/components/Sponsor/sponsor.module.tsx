@@ -4,6 +4,7 @@ import BookTemplate from "../bookTemplate/bookTemplate.module";
 const Sponsor = () => {
 	const [books, setBooks] = useState([]);
 	const [selectedBooks, setSelectedBooks] = useState([]);
+	let response;
 	const getResponse = () => {
 		return {
 			ok: 1,
@@ -41,12 +42,12 @@ const Sponsor = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				// const response = await fetch("api/books"); // Replace with your API endpoint
-				const response = getResponse();
+				const response = await fetch("http://204.236.243.72:8000/api/books"); // Replace with your API endpoint
+				// response = getResponse();
 				if (response.ok) {
-					// const data = await response.json();
-					// setBooks(data.results); // Assuming your response structure has a "sponsors" array
-					setBooks(response.results);
+					const data = await response.json();
+					setBooks(data.results); // Assuming your response structure has a "sponsors" array
+					// setBooks(response.results);
 				} else {
 					console.error("Failed to fetch sponsors");
 				}
@@ -67,16 +68,34 @@ const Sponsor = () => {
 		);
 	};
 
-	const handleCheckout = async () => {
+	const handleCheckout = () => {
+		response.results.map(async (book) => {
+			if (selectedBooks.includes(book.id)) {
+				const sponsorId = 1;
+				const updatedBook = {
+					...book,
+					sponsors: [...book.sponsors, sponsorId],
+				};
+
+				// Make the update call for the current book ID
+				await makeUpdateCall(book.id, updatedBook);
+			}
+		});
+	};
+
+	const makeUpdateCall = async (bookId, updatedBook) => {
 		// Make the update call for selected sponsors
 		try {
-			const response = await fetch("https://api.example.com/updateSponsors", {
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ selectedBooks }),
-			});
+			const response = await fetch(
+				"http://204.236.243.72:8000/api/update/${bookId}/",
+				{
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(updatedBook),
+				}
+			);
 
 			if (response.ok) {
 				console.log("Selected sponsors updated successfully");
@@ -93,10 +112,12 @@ const Sponsor = () => {
 			<div className={styles.bookTemplateParent}>
 				{books.map((book) => (
 					<div key={book.id} className={styles.bookCards}>
-                        <button
-                            onClick={() => handleSelect(book.id)}
-                            className={selectedBooks.includes(book.id) ? styles.selectedCard : ""}
-                        >
+						<button
+							onClick={() => handleSelect(book.id)}
+							className={
+								selectedBooks.includes(book.id) ? styles.selectedCard : ""
+							}
+						>
 							<BookTemplate name={book.name} description={book.about} />
 						</button>
 						{/* {book.name} 

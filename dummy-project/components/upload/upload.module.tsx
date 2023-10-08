@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import styles from "./upload.module.css";
 import { Button } from "@mui/material";
 
@@ -10,7 +10,7 @@ const Upload: React.FC = () => {
 		field3: "",
 		// Add more fields as needed
 	});
-
+	const fileInputRef = useRef(null);
 	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const selectedFile = event.target.files?.[0];
 		if (selectedFile) {
@@ -61,13 +61,18 @@ const Upload: React.FC = () => {
 		console.log("Text Fields:", textFields);
 	};
 
+	const handleRectangleClick = (event) => {
+			fileInputRef.current.click();
+	};
+
 	return (
 		<div className={styles.uploadContainer}>
 			<form onSubmit={handleSubmit}>
-				<div className={styles.dashedRectangle}>
+				<div className={styles.dashedRectangle} onClick={handleRectangleClick}>
 					<div className={styles.formGroup}>
 						<label className={styles.uploadLabel}>Upload your file here</label>
 						<input
+							ref={fileInputRef}
 							id="fileInput"
 							type="file"
 							accept=".pdf, .jpeg, .jpg, .png"
@@ -84,6 +89,7 @@ const Upload: React.FC = () => {
 						value={textFields.field1}
 						onChange={handleTextChange}
 						className={styles.input}
+						required
 					/>
 				</div>
 
@@ -95,6 +101,7 @@ const Upload: React.FC = () => {
 						value={textFields.field2}
 						onChange={handleTextChange}
 						className={styles.input}
+						required
 					/>
 				</div>
 
@@ -106,6 +113,7 @@ const Upload: React.FC = () => {
 						value={textFields.field3}
 						onChange={handleTextChange}
 						className={styles.input}
+						required
 					/>
 				</div>
 				{/* Add more text fields as needed */}

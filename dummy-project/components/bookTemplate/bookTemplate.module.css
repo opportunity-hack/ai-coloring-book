@@ -1,6 +1,10 @@
 .template{
     width: 100px;
-    height: 250px;
+    height: 200px;
     display: flex;
     flex-direction: column;
+}
+
+.generalPadding{
+    margin: 10px;;
 }

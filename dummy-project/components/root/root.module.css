@@ -1,5 +1,5 @@
 .mainContainer{
-    height: 80vh;
+    height: 75vh;
     display: flex;
     text-align: center;
     justify-content: center;
@@ -32,6 +32,7 @@
 }
 .backBtn{
     font-size: 2.6rem;
+    font-family: serif;
     margin-left: 1rem;
     float: left;
     cursor: pointer;

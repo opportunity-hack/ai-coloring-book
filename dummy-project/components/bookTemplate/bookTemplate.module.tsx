@@ -4,16 +4,16 @@ import Image from "next/image";
 const BookTemplate = (props: any) => {
 	return (
 		<div className={styles.template}>
-			<div>
-				<label>{props.name}</label>
+			<label className={styles.generalPadding}>{props.name}</label>
+			<div className={styles.generalPadding}>
 				<Image
 					src="/images/book-template-image.png"
 					alt="Your Image Alt Text"
-					width={50}
-					height={50}
+					width={70}
+					height={70}
 				/>
 			</div>
-			{props.description}
+			<div className={styles.generalPadding}>{props.description}</div>
 		</div>
 	);
 };
