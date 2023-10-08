@@ -89,10 +89,10 @@ const Sponsor = () => {
 	};
 
 	return (
-		<div>
-			<div className={styles.bookCards}>
+		<div className={styles.classMain}>
+			<div className={styles.bookTemplateParent}>
 				{books.map((book) => (
-					<div key={book.id}>
+					<div key={book.id} className={styles.bookCards}>
 						<button onClick={() => handleSelect(book.id)}>
 							{selectedBooks.includes(book.id) ? "Deselect" : "Select"}
 							<BookTemplate name={book.name} description={book.about} />

@@ -14,7 +14,19 @@
       background-color: #45a049;
   }
 
-  .bookCards{
+  .bookCards {
+      display: flex;
+      margin: 15px;
+  }
+
+  .classMain {
+    width: 100%;
+      padding-bottom: 20px;
+      padding-top: 20px;
+      align-items: center;
+      justify-content: center;
+  }
+
+  .bookTemplateParent{
     display: flex;
-    flex-direction: row;
   }
