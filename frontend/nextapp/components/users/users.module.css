@@ -1,0 +1,11 @@
+.createUserForm{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    width: 500px;
+}
+.inputItem{
+    width: 300px;
+}

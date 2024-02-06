@@ -1,0 +1,117 @@
+.rootContainer{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.topNav{
+    width: 100vw;
+    height: 60px;
+    background-color: #12b886;
+    display: flex;
+    align-items: center;
+}
+.logoutButton{
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.sideNav{
+    width: 20vw;
+    height: 100vh;
+    border: 1px solid rgb(133, 131, 131);
+}
+.main{
+    width: 80vw;
+    height: 100vh;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    flex-direction: column;
+    padding: 10px;
+}
+.booksContainer{
+
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 330px);
+    justify-items: center;
+    width: 100%;
+    height: 90%;
+    /* background-color: chartreuse; */
+}
+
+.heartDonate{
+    margin-right: 3px;
+    color: white;
+}
+
+.mainPaymentContainer{
+    margin-top: 30px;
+    background-color: rgb(231, 231, 231);
+    width: 600px;
+    height: 600px;
+}
+.navGrid{
+    display: flex;
+    width: 100%;
+}
+
+.booksGridContainer {
+  height: 70%; /* 70% height of its parent */
+  overflow-y: scroll; /* Enables vertical scrolling if content overflows */
+  width: 100%; /* Full width */
+}
+
+.publishButton{
+    flex-grow: 1; /* Takes up the remaining space */
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Aligns the button to the bottom */
+  padding: 20px; /* Adds some spacing around the button */
+}
+
+.uploadContainerMain{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    gap: 1rem;
+}
+
+.dropZone{
+    width: 800px;
+    height: 300px;
+}
+
+.paymentContainerMain{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    gap: 1rem;
+}
+.thankyouContainerMain{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    gap: 1rem;
+}
+
+.notificationContainer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  margin: 16px;
+  z-index: 1000;
+  width: 300px;
+}

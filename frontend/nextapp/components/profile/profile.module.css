@@ -1,0 +1,16 @@
+.profileContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+.profileImgUpload{
+    height: 100px;
+    width: 100px;
+    border-radius: 100px;
+    border: 1px solid black;
+}
+.profileImgUploadd{
+    height: 200px;
+    width: 100px;
+}

@@ -1,0 +1,45 @@
+.card{
+    width: 200px;
+    height: 300px;
+    padding: 10px;
+    flex-grow: 1;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.selectedCard{
+    border: 2px solid #007bff; 
+    box-shadow: 0 0 15px #007bff;
+}
+
+.cardImage{
+    height: 150px; /* Set the height you desire */
+    width: 150px;  /* Set the width you desire */
+    object-fit: contain; /* This will ensure that the aspect ratio is maintained */
+}
+
+.actionIcons{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.progressBar{
+    height: 200px;
+    width: 100%;
+}
+
+.progressLabel {
+  color: black; /* Sets the font color to black */
+  width: 100%; /* Ensures the label takes the full width of the parent */
+  text-align: center; /* Centers the text within the label */
+  position: absolute; /* Positions the label */
+  left: 0; /* Aligns the label to the left of the parent */
+  top: 50%; /* Positions the label at 50% from the top of the parent */
+  transform: translateY(-50%); /* Adjusts the label's position to be vertically centered */
+}
