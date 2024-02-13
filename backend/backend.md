@@ -6,6 +6,21 @@
 Make sure Python is installed with the following versions:
 - Python: v3.10.1
 
+0. If on Mac: 
+```
+brew install postgresql
+Uninstall psycopg2: pip uninstall psycopg2
+Re-install psycopg2: pip install psycopg2-binary
+
+# Start Postgres server and connect
+psql postgres
+CREATE ROLE <username> WITH LOGIN PASSWORD '<password>';
+CREATE DATABASE suziev3;
+GRANT ALL PRIVILEGES ON DATABASE suziev3 TO <username>;
+
+Update .env with these details
+```
+
 1. Clone the repository:
 git clone https://github.com/2023-opportunity-hack/Caffeine-Compilers--FromSketchestoSmiles-AColoringBookthatGivesBack.git
 
@@ -14,7 +29,10 @@ git clone https://github.com/2023-opportunity-hack/Caffeine-Compilers--FromSketc
 pip install -r requirements.txt
 ```
 
+
 3. Run the migrations:
+
+
 ```
 python manage.py migrate
 ```
