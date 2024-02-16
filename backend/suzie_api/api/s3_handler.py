@@ -8,7 +8,7 @@ import datetime
 
 class S3Handler:
     def __init__(self, bucket_name):
-        self.s3 = boto3.client('s3')
+        self.s3 = boto3.client('s3')        
         self.bucket_name = bucket_name
 
     def upload_file_to_s3(self, file_obj, file_name):

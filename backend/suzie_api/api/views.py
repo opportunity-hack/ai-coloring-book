@@ -1,4 +1,6 @@
 import logging
+import resend
+
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -11,16 +13,18 @@ from django.contrib.auth import get_user_model
 import datetime
 import os
 import replicate
-import smtplib, ssl
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from io import BytesIO
 from dotenv import load_dotenv
 from api.permission import IsAdmin, AllUsers
 from api.s3_handler import S3Handler
 
+# Setup logger
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 load_dotenv()
 
+resend.api_key = os.getenv("RESEND_API_KEY")
 UserModel = get_user_model()
 
 NPO_URLS = ['https://shorturl.at/lz457'] * 11
@@ -153,12 +157,6 @@ class SponsorPayAPIView(APIView):
         return Response({"sponsor": sponsor.id, "books": books, "amount_per_book": amount_per_book})
 
     def send_congratulatory_email(self, sponsor_name, book_list, donation_amount):
-        # Creating the message
-        message = MIMEMultipart()
-        message['From'] = os.getenv("ADMIN_EMAIL")
-        message['To'] = os.getenv("RECEIVER_EMAIL")
-        message['Subject'] = "We have a Sponsor!"
-
         # Email body
         books_formatted = "new-line".join([f"- {book}" for book in book_list])
         email_body = f"""
@@ -190,29 +188,36 @@ class SponsorPayAPIView(APIView):
                 </body>
                 </html>
                 """
-        message.attach(MIMEText(email_body, 'html'))
-
+        
         # Sending the email
         try:
-            context = ssl.create_default_context()
-            with smtplib.SMTP_SSL(os.getenv("SMTP_SERVER"), int(os.getenv("SMTP_PORT")), context=context) as server:
-                server.login(os.getenv("ADMIN_EMAIL"), os.getenv("ADMIN_EMAIL_PASSWORD"))
-                server.sendmail(os.getenv("ADMIN_EMAIL"), os.getenv("RECEIVER_EMAIL"), message.as_string())
-                print("Email successfully sent!")
+            r = resend.Emails.send({
+              "from": os.getenv("ADMIN_EMAIL"),
+                "to": os.getenv("RECEIVER_EMAIL"),
+                "subject": "We have a Sponsor!",
+                "html": email_body
+            })
+            print("Email successfully sent!")
         except Exception as e:
             print(f"Failed to send email. Error: {e}")
 
 
-class BooksViewSet(viewsets.ModelViewSet):
+class BooksViewSet(viewsets.ModelViewSet):    
     queryset = Books.objects.all()
     serializer_class = BooksSerializer
     permission_classes = (AllUsers,)
 
     def create(self, request, *args, **kwargs):
+        logger.info("Creating book")
+        logger.info(request.data)
+
         drawings = request.data["drawings"]
         total_sponsors = request.data["totalSponsors"]
         ts = int(datetime.datetime.now().timestamp())
-        book = {"name": f"Book_{ts}", "cover_url": "", "drawings": [], "total_sponsors": total_sponsors}
+        # Make ts human readable and use underscores instead of spaces
+        ts_str = datetime.datetime.fromtimestamp(ts).strftime('%Y%m%d_%H%M%S')
+        book = {"name": f"Book_{ts_str}", "cover_url": "", "drawings": [], "total_sponsors": total_sponsors}
+        logger.info(f"Book data: {book}")
         # set use_ai fields
         drawings_pk = []
         image_urls = []
@@ -246,14 +251,18 @@ class GenerateBooksView(APIView):
     permission_classes = (AllUsers,)
 
     def post(self, request, *args, **kwargs):
+        logger.info("Generating book")        
         try:
-            book = Books.objects.get(pk=request.data["id"])
-            print(book.drawings)
+            book = Books.objects.get(pk=request.data["id"])            
+            logger.info(f"Book: {book}")
+
             bucket = os.getenv("AWS_BUCKET")
             folder = "npos"
+            
             npo_urls = [url for url in S3Handler(bucket_name=bucket).get_s3_urls(folder) if url != f"https://{bucket}.s3.amazonaws.com/{folder}/"]
             scribble_urls = list(set(x.ai_creative_url if x.use_ai else x.creative_url for x in book.drawings.all()))
             sponsor_urls = list(set([x.sponsor_id.logo for x in book.sponsoredbooks_set.all()]))
+            
             book_url = convert_images_to_pdf(
                 scribble_urls=scribble_urls,
                 sponsor_urls=sponsor_urls,

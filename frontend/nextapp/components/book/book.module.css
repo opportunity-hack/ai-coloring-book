@@ -1,8 +1,9 @@
 .card{
-    width: 200px;
+    width: 250px;
     height: 300px;
-    padding: 10px;
+    padding: 5px;
     flex-grow: 1;
+    margin: 0px;
     cursor: pointer;
     display: flex;
     flex-direction: column;
@@ -14,9 +15,8 @@
 }
 
 .cardImage{
-    height: 150px; /* Set the height you desire */
-    width: 150px;  /* Set the width you desire */
-    object-fit: contain; /* This will ensure that the aspect ratio is maintained */
+    height: 100px; /* Set the height you desire */
+     
 }
 
 .actionIcons{
@@ -26,7 +26,6 @@
     gap: 1rem;
     align-items: center;
     justify-content: center;
-
 }
 
 .progressBar{

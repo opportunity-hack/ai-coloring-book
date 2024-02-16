@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, Input, Group, Text, rem, Notification } from '@mantine/core';
-import { IconLogout2, IconHeart, IconUpload, IconPhoto, IconX } from '@tabler/icons-react';
+import { IconLogout2, IconHeart, IconUpload, IconPhoto, IconX, IconConfetti } from '@tabler/icons-react';
 import styles from "./page.module.css";
 import SponsorBookSteps from '../../../components/sponsor-book-steps/sponsor-book-steps.module.js';
 import NavBar from '../../../components/nav-bar-sponsor/nav-sponsor.module.js';
@@ -122,8 +122,14 @@ function PaymentPage( {selectedBooks, thankyouPage} ) {
 
   return (
     <>
-
+    <Text size="xl" weight={700} align="center" mt={20} mb={20}>      
+        You are sponsoring {selectedBooks.length} book{selectedBooks.length > 1 ? 's' : ''}  <IconConfetti/>
+    </Text>
+    <Text size="xl" weight={700} align="center" mt={20} mb={20}>      
+          Total Amount: ${totalAmount}
+    </Text>
         <PayPalScriptProvider options={{ clientId: initialOptions.clientId, components: "buttons", currency: "USD" }}>
+          
           <PayPalButtons
             // initialOptions={initialOptions}
             createOrder={createOrder}
@@ -166,7 +172,11 @@ export default function Sponsor() {
           url: book.cover_url,
           book_url: book.url,
           current_sponsors: book.current_sponsors || 0, // Add current sponsors
-          total_sponsors: book.total_sponsors || 0 // Add total sponsors
+          total_sponsors: book.total_sponsors || 0, // Add total sponsors
+          created_on: book.created_on,
+          modified_on: book.modified_on,
+          drawings: book.drawings || [],
+          sponsors: book.sponsors || [],
         }));
 
       console.log(transformedBooks)
@@ -245,7 +255,11 @@ export default function Sponsor() {
         return (
           <>
             <TopNavigation prevStep={prevStep} active={active} setActive={setActive} />
+            
             <div className={styles.booksGridContainer}>
+              <Text size="xl" weight={700} align="center" mt={20} mb={20}>
+                Select any books to sponsor
+            </Text>
               <BooksGrid books={books} handleCardClick={handleCardClick}
                         setIsNotificationActive={setIsNotificationActive}
                         setNotificationMessage={setNotificationMessage}

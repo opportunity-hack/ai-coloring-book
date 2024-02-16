@@ -28,10 +28,11 @@ class SponsorsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class BooksSerializer(serializers.ModelSerializer):
+class BooksSerializer(serializers.ModelSerializer):   
     class Meta:
         model = Books
-        fields = '__all__'
+        fields = ['id', 'name', 'about', 'cover_url', 'url', 'sponsors', 'current_sponsors', 'total_sponsors', 'is_published', 'created_on', 'modified_on', 'drawings']
+        
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):

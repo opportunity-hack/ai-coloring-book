@@ -1,0 +1,33 @@
+# fly.toml app configuration file generated for susieqsbooks-backend-1 on 2024-02-16T14:18:47-07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'susieqsbooks-backend-1'
+primary_region = 'lax'
+console_command = '/code/manage.py shell'
+
+[build]
+
+[deploy]
+  release_command = 'python manage.py migrate --noinput'
+
+[env]
+  PORT = '8000'
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '512mb'
+  cpu_kind = 'shared'
+  cpus = 1
+
+[[statics]]
+  guest_path = '/code/static'
+  url_prefix = '/static/'

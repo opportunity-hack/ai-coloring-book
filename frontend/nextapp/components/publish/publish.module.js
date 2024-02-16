@@ -32,10 +32,15 @@ function PublishPage(props) {
           url: book.cover_url,
           book_url: book.url,
           current_sponsors: book.current_sponsors || 0, // Add current sponsors
-          total_sponsors: book.total_sponsors || 0 // Add total sponsors
+          total_sponsors: book.total_sponsors || 0, // Add total sponsors
+          created_on: book.created_on,
+          modified_on: book.modified_on,
+          drawings: book.drawings,
+          sponsors: book.sponsors,
         }));
-        console.log(transformedBooks)
-        setBooks(transformedBooks);
+
+        const sortedBooks = transformedBooks.sort((a, b) => b.created_on.localeCompare(a.created_on));
+        setBooks(sortedBooks);
       } catch (error) {
         console.error('Failed to fetch books:', error);
         // Handle error here

@@ -92,7 +92,7 @@ export default function Admin() {
       );
       console.log(response.data);
       setIsNotificationActive(true)
-      setNotificationMessage("Book created")
+      setNotificationMessage("Book created, go to publish page to publish it!")
     } catch (error) {
       console.error('Failed to create book:', error);
       // Handle error here
@@ -121,10 +121,6 @@ export default function Admin() {
     setIsNotificationActive(false);
   };
 
-
-
-  
-
   const renderActivePage = () => {
     switch (activePage) {
       case 'drawings':
@@ -151,7 +147,11 @@ export default function Admin() {
                   value={totalSponsors}
                   onChange={handleTotalSponsorsChange}
                 />
-                <Button className={styles.createBookButton} onClick={createBook}>
+                <Button
+                  className={styles.createBookButton}
+                  onClick={createBook}
+                  disabled={drawings.filter(drawing => drawing.selected).length <= 0}
+                >
                   Create book
                 </Button>
               </div>

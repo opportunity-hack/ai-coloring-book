@@ -34,12 +34,11 @@
 .drawingsContainer{
     margin-top: 10px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, 330px);
+    grid-template-columns: repeat(auto-fill, 200px);
     justify-items: center;
-    width: 100%;
-    height: 70%; /* 70% height of its parent */
+    width: 100%;    
     overflow-y: scroll; /* Enables vertical scrolling if content overflows */
-    gap: 1rem;
+    gap: 0.5rem;
 }
 
 .submitContainer{

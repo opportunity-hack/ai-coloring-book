@@ -175,3 +175,20 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'TOKEN_TYPE_CLAIM': 'token_type',
 }
+'''
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'request_data_handler': {
+            'level': 'INFO',
+            'class': 'api.custom_logging_handler.RequestDataHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['request_data_handler'],
+            'level': 'INFO',
+        },
+    },
+}
+'''

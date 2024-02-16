@@ -1,14 +1,18 @@
 "use client";
-import { Card, Image } from '@mantine/core';
+import { Card, Image, Badge, Group } from '@mantine/core';
+import { Text } from '@mantine/core';
 import styles from "./book.module.css";
-import { IconTrash, IconDownload } from '@tabler/icons-react';
+import { IconTrash, IconDownload, IconCalendarEvent, IconPhotoFilled} from '@tabler/icons-react';
 import { Progress, Tooltip } from '@mantine/core';
 import axios from 'axios';
+import moment from 'moment';
+
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 function Book({ book, handleCardClick, setIsNotificationActive, setNotificationMessage, handleDeleteBook }) {
-
+  console.log(book);
+  
   const role = localStorage.getItem("role");
 
   const handleDownload = async (e) => {
@@ -17,7 +21,7 @@ function Book({ book, handleCardClick, setIsNotificationActive, setNotificationM
     try {
         // Using Axios to send a POST request to the backend
         setIsNotificationActive(true);
-        setNotificationMessage("Generating your book");
+        setNotificationMessage("Generating your book, this usually takes 10 seconds and will trigger a download automatically. Please wait...");
         const response = await axios.post(
             `${apiUrl}/api/generate_book`, 
             { id: book.id }, // No need to stringify the body with Axios
@@ -80,23 +84,32 @@ function Book({ book, handleCardClick, setIsNotificationActive, setNotificationM
         className={`${styles.card} ${book.selected ? styles.selectedCard : ''}`}
         onClick={handleCardClick}
       >
-        <Image
-          src={book.url}
-          alt={book.label}
-          className={styles.cardImage}
-          fit="contain"
-        />
-        <span>{book.label}</span>
         
-        <span style={{marginTop: "10px"}}>Sponsors</span>
-        <Progress.Root size="l" className={styles.progressBar}>
+          <Image
+            src={book.url}
+            alt={book.label}
+            height={100}
+          />
+        
+        
+        <Text size="xs"><IconCalendarEvent size={19} />{moment.utc(book.created_on).local().format('MMM Do YYYY h:mm:ssa')}</Text>        
+        { book.drawings && <Group><Tooltip label="Drawings in this book"><Badge>{book.drawings.length} drawings</Badge></Tooltip></Group> }
+        
+        <Text size="xs">{book.label}</Text>
+        
+        
+
+         <Text>Sponsors</Text>
+          <Progress.Root size="l" className={styles.progressBar}>
           <Progress.Section value={progressPercentage} color="cyan">
             <Progress.Label className={styles.progressLabel}>
               {book.current_sponsors}/{book.total_sponsors}
             </Progress.Label>
           </Progress.Section>
         </Progress.Root>
-
+        
+        
+        
 
         <div className={styles.actionIcons}>
           <IconDownload size="1.5rem" stroke={1.5} className={styles.iconDownload} onClick={handleDownload} />
