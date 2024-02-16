@@ -63,6 +63,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     modified_date = models.DateTimeField(default=timezone.now)
     created_by = models.EmailField()
     modified_by = models.EmailField()
+    
+    def is_staff(self):
+        return self.role == self.ADMIN
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
