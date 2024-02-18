@@ -11,7 +11,7 @@ WORKDIR /app
 
 # Set production environment
 ENV NODE_ENV="production"
-ENV NEXT_PUBLIC_API_URL="https://susieqsbooks-backend-1.fly.dev"
+ENV NEXT_PUBLIC_API_URL="https://api.susieqsbooks.org"
 
 # Throw-away build stage to reduce size of final image
 FROM base as build
