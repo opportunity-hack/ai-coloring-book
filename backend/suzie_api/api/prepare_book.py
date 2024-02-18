@@ -150,19 +150,20 @@ def convert_images_to_pdf(book_name, scribble_urls, sponsor_urls=[], npo_urls=[]
     logger.info(f"Total scribbles: {len(scribble_urls)}")
     for i, url in enumerate(scribble_urls):
         logger.info(f"Processing scribble {i + 1} of {len(scribble_urls)} with URL: {url}")
-        response = requests.get(url)
-        drawing = Image.open(BytesIO(response.content)).resize((2280, 2280))
-        paper_width = 2480
-        paper_height = 3208
-        bg = Image.new("RGB", (paper_width, paper_height + 300), (255, 255, 255))
-        draw = ImageDraw.Draw(bg)
-        prettified_draw = prettify_page(draw, headings[i], colors[i % len(colors)], page_no, scribble=True)
-        # Calculate center position for the scribble image
-        x_center = (paper_width - drawing.width) // 2
-        y_center = (paper_height - drawing.height) // 2 + 100  # Adjust y position to accommodate heading
-        bg.paste(drawing, (x_center, y_center))
-        pages.append(bg)
-        page_no += 1
+        response = requests.get(url, stream=True)
+        with Image.open(BytesIO(response.content)).resize((2280, 2280)) as drawing:
+            paper_width = 2480
+            paper_height = 3208
+            bg = Image.new("RGB", (paper_width, paper_height + 300), (255, 255, 255))
+            draw = ImageDraw.Draw(bg)
+            prettified_draw = prettify_page(draw, headings[i], colors[i % len(colors)], page_no, scribble=True)
+            # Calculate center position for the scribble image
+            x_center = (paper_width - drawing.width) // 2
+            y_center = (paper_height - drawing.height) // 2 + 100  # Adjust y position to accommodate heading
+            bg.paste(drawing, (x_center, y_center))
+            pages.append(bg)
+            page_no += 1
+        response.close()
 
     logger.info(f"Total sponsors: {len(sponsor_urls)}")
     if len(sponsor_urls) != 0 and sponsor_urls is not None:
