@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 load_dotenv()
 
-resend.api_key = os.getenv("RESEND_API_KEY")
+resend.api_key = os.getenv("RESEND_EMAIL_KEY")
 UserModel = get_user_model()
 
 NPO_URLS = ['https://shorturl.at/lz457'] * 11
@@ -48,11 +48,14 @@ class DrawingsViewSet(viewsets.ModelViewSet):
 
 
 class CreateDrawingsViewSet(viewsets.ModelViewSet):
-    queryset = Drawings.objects.all()
+    logger.info("Creating drawings")
+    queryset = Drawings.objects.all()    
     serializer_class = DrawingsSerializer
     permission_classes = (AllowAny,)
-
+    
     def create(self, request, *args, **kwargs):
+        logger.info("Creating drawing")
+
         raw_sketch = request.data["image"]
         subject = request.data["subject"]
         prompt = f"{subject} as simple coloring book page"
@@ -264,6 +267,8 @@ class GenerateBooksView(APIView):
             logger.info(f"NPO URLs: {npo_urls}")
 
             scribble_urls = list(set(x.ai_creative_url if x.use_ai else x.creative_url for x in book.drawings.all()))
+            scribble_metadata = [f"{x.subject} by {x.created_by}" for x in book.drawings.all()]
+            scribble_school = [x.school for x in book.drawings.all()]
             logger.info(f"Found {len(scribble_urls)} scribble URLs for book {book.id}")
 
             sponsor_urls = list(set([x.sponsor_id.logo for x in book.sponsoredbooks_set.all()]))
@@ -272,6 +277,8 @@ class GenerateBooksView(APIView):
             logger.info("Converting images to PDF")
             book_url = convert_images_to_pdf(
                 book_name=book.name,
+                scribble_metadata=scribble_metadata,
+                scribble_school=scribble_school,
                 scribble_urls=scribble_urls,
                 sponsor_urls=sponsor_urls,
                 npo_urls=npo_urls,

@@ -72,6 +72,7 @@ def prettify_page(drawing_context, heading, color, page_no, scribble=False):
         image_width, image_height = (2280, 2280)
         x_image = (paper_width - image_width) // 2
         y_image = (paper_height - image_height) // 2 + 100  # Adjust based on heading's position
+        
         # Adjust border size and position as necessary
         drawing_context.rectangle(
             [(x_image - border_width, y_image - border_width),
@@ -136,7 +137,7 @@ def create_sponsors_page(heading, color, image_urls, page_no):
     return output_image
 
 
-def convert_images_to_pdf(book_name, scribble_urls, sponsor_urls=[], npo_urls=[], headings=None):
+def convert_images_to_pdf(book_name, scribble_metadata, scribble_school, scribble_urls, sponsor_urls=[], npo_urls=[], headings=None):
     if headings is None:
         headings = [""] * len(scribble_urls)
     # BASE_DIR = os.path.dirname("/content/")
@@ -156,7 +157,21 @@ def convert_images_to_pdf(book_name, scribble_urls, sponsor_urls=[], npo_urls=[]
             paper_height = 3208
             bg = Image.new("RGB", (paper_width, paper_height + 300), (255, 255, 255))
             draw = ImageDraw.Draw(bg)
-            prettified_draw = prettify_page(draw, headings[i], colors[i % len(colors)], page_no, scribble=True)
+            prettify_page(draw, headings[i], colors[i % len(colors)], page_no, scribble=True)
+            # Add title with metadata
+            font_path = 'api/content/lilita-one.regular.ttf'
+            font_size = 70
+            font = ImageFont.truetype(font_path, font_size)
+            metadata = scribble_metadata[i]
+            school = scribble_school[i]
+            
+            text = f"{metadata}\n{school}"
+            
+            text_width, text_height = draw.textsize(text, font)
+            x_text = (paper_width - text_width) // 2
+            y_text = 200
+            draw.text((x_text, y_text), text, fill=(0, 0, 0), font=font)
+
             # Calculate center position for the scribble image
             x_center = (paper_width - drawing.width) // 2
             y_center = (paper_height - drawing.height) // 2 + 100  # Adjust y position to accommodate heading
@@ -164,6 +179,7 @@ def convert_images_to_pdf(book_name, scribble_urls, sponsor_urls=[], npo_urls=[]
             pages.append(bg)
             page_no += 1
         response.close()
+        del response  # Delete the response object to free up memory
 
     logger.info(f"Total sponsors: {len(sponsor_urls)}")
     if len(sponsor_urls) != 0 and sponsor_urls is not None:
@@ -173,11 +189,14 @@ def convert_images_to_pdf(book_name, scribble_urls, sponsor_urls=[], npo_urls=[]
                 create_sponsors_page("SPONSORS", (255, 127, 0), sponsor_urls[i:min((i + 6), len(sponsor_urls))],
                                      page_no))
             page_no += 1
+        del sponsor_urls  # Delete the sponsor_urls list to free up memory
+    
     if len(npo_urls) != 0 and npo_urls is not None:
         logger.info(f"Creating NGOs pages with URLs: {npo_urls}")
         for i in range(0, len(npo_urls), 6):
             pages.append(create_sponsors_page("NGOs", (0, 180, 42), npo_urls[i:min((i + 6), len(npo_urls))], page_no))
             page_no += 1
+        del npo_urls  # Delete the npo_urls list to free up memory
 
     # pages[0].save(pdf_path, "PDF", resolution=90.0, save_all=True, append_images=pages[1:])
     # return pdf_path

@@ -7,8 +7,8 @@ import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Suzie Q's kids",
-  description: "Sketched to Smiles",
+  title: "SusieQ's Books",
+  description: "From sketches to smiles, SusieQ's Books is a place where kids can share their drawings and stories with the world.",
 };
 
 export default function RootLayout({children,}) {

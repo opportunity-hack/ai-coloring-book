@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Input, Group, Text, rem, Image } from '@mantine/core';
+import { Button, TextInput, Group, Text, rem, Image, Select, NavLink } from '@mantine/core';
 import { IconLogout2, IconRefresh, IconHeart } from '@tabler/icons-react';
 import styles from "./page.module.css";
 import SponsorBookSteps from '../../../components/sponsor-book-steps/sponsor-book-steps.module.js';
@@ -16,7 +16,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function UploadDrawings() {
   const [file, setFile] = useState(null);
-  const [uploadStatus, setUploadStatus] = useState("Upload a drawing here");
+  const [uploadStatus, setUploadStatus] = useState("Upload an image and tell us about it.");
   const [subject, setSubject] = useState('');
   const [school, setSchool] = useState('');
   const [createdBy, setCreatedBy] = useState('');
@@ -24,6 +24,15 @@ export default function UploadDrawings() {
   const [userCaptchaInput, setUserCaptchaInput] = useState('');
   const [isNotificationActive, setIsNotificationActive] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
+  
+  const [supportedSchools, setSupportedSchools] = useState(
+    ['Maurice M. Wilde Elementary School',
+    'Margaret I. Susick Elementary School',
+    'John H. Siersma Elementary School',
+    'Pearl O. Lean Elementary School', 'Pinewood Elementary School',
+    'Briarwood Elementary School', 'Great Oaks Academy', 'Michigan Mathematics and Science Academy (MMSA)']
+);
+
 
   const handleUserCaptchaChange = (e) => {
     setUserCaptchaInput(e.currentTarget.value);
@@ -61,6 +70,13 @@ export default function UploadDrawings() {
   };
 
   const handleUpload = async () => {
+    // Print file, subject, school, createdBy
+    console.log("file", file);
+    console.log("subject", subject);
+    console.log("school", school);
+    console.log("createdBy", createdBy);
+    console.log("captchaValue", captchaValue);
+
     setUploadStatus(null);
     if (!file) {
       alert('Please select a file to upload');
@@ -75,21 +91,16 @@ export default function UploadDrawings() {
     }
    
 
-    const formData = new FormData();
-    formData.append('image', file);
-    formData.append('subject', subject);
-    formData.append('school', school);
-    formData.append('created_by', createdBy);
+    try {            
+      const formData = new FormData();
+      formData.append('image', file);
+      formData.append('subject', subject);
+      formData.append('school', school);
+      formData.append('created_by', createdBy);
 
-    try {
-      console.log(file)
-      console.log(formData)
-      const response = await axios.post(
-        `${apiUrl}/api/upload_drawings/`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          },
-      });
+      const response = await axios.post(`${apiUrl}/api/upload_drawings/`, formData);
+
+      
       console.log(response.data);
       setUploadStatus(`Uploaded: ${file.name}`);
       console.log(response.data);
@@ -105,17 +116,25 @@ export default function UploadDrawings() {
   return (
     <>
       <div className={styles.topNav}>
+       <NavLink href="/" label="Home" leftSection={<IconHeart size="1rem" stroke={1.5} />} variant="link" />        
       </div>
       <div className={styles.rootContainer}>
-        <h1> Upload drawings</h1>
+        <Text size="xl" weight={700}>Upload a drawing</Text>
+        <Text size="sm" c="dimmed">Add your drawing to our collection.  Drawings will be combined into a coloring book to support kids in need.</Text>
+
         <Dropzone
           onDrop={handleDrop}
-          onReject={(files) => console.log('rejected files', files)}
+          onReject={(files) => 
+            {              
+              setUploadStatus("File rejected. Please upload a file that is less than 1mb and is an image file.");              
+            }
+          }                     
+
           maxSize={1 * 1024 ** 2}
           accept={IMAGE_MIME_TYPE}
           className={styles.dropZone}
         >
-          <Group justify="center" gap="xl" mih={220} style={{ pointerEvents: 'none' }}>
+          <Group justify="center" gap="xl" mih={150} style={{ pointerEvents: 'none' }}>
             <Dropzone.Accept>
               <IconUpload
                 style={{ width: rem(52), height: rem(52), color: 'var(--mantine-color-blue-6)' }}
@@ -145,24 +164,37 @@ export default function UploadDrawings() {
             </div>
           </Group>
         </Dropzone>
+                
         {<Text>{uploadStatus}</Text>}
-        <Input
-            placeholder="Drawing subject"
+        
+        <TextInput
+            placeholder="Title of drawing"
+            label="Title"
+            description="What do you call your work of art? What is in the drawing?"
             value={subject}
             onChange={(e) => setSubject(e.currentTarget.value)}
-            className={styles.subject}
+            className={styles.formInput}
         />
-        <Input
+        
+        
+          <Select
             placeholder="School"
+            description="Which school is this drawing for?"
+            label="School"
             value={school}
-            onChange={(e) => setSchool(e.currentTarget.value)}
-            className={styles.subject}
-        />
-        <Input
-            placeholder="Create by :)"
+            onChange={(value) => setSchool(value)}
+            data={supportedSchools}
+            className={styles.formInput}
+            searchable
+          />
+        
+        <TextInput
+            placeholder="Artist name (optional)"
+            description="Name of the artist who created the drawing"
+            label="Created by"
             value={createdBy}
             onChange={(e) => setCreatedBy(e.currentTarget.value)}
-            className={styles.subject}
+            className={styles.formInput}
         />
         <div style={{ display: "flex", width: "200px", marginTop: "10px" }}>
 
