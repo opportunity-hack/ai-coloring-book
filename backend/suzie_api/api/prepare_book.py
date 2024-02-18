@@ -6,6 +6,13 @@ from PIL import Image, ImageDraw, ImageFont
 from api.s3_handler import S3Handler
 import os
 
+import logging
+import sys
+# logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -101,10 +108,13 @@ def create_sponsors_page(heading, color, image_urls, page_no):
     starting_x = (2480 - image_width * num_columns - margin * (num_columns - 1)) // 2
     starting_y = 320 + (paper_height - margin * (num_rows + 1) - image_height * num_rows) // 2
 
-    print(starting_x)
+    
     # Loop through the image URLs and paste them onto the A4 canvas
     total_images = len(image_urls)
+    logger.info(f"Total images: {total_images}")
+
     for i, image_url in enumerate(image_urls):
+        logger.info(f"Processing image {i + 1} of {total_images} for page {page_no} with URL: {image_url}")
         # Download the image from the URL
         response = requests.get(image_url)
         img = Image.open(BytesIO(response.content))
@@ -126,7 +136,7 @@ def create_sponsors_page(heading, color, image_urls, page_no):
     return output_image
 
 
-def convert_images_to_pdf(scribble_urls, sponsor_urls=[], npo_urls=[], headings=None):
+def convert_images_to_pdf(book_name, scribble_urls, sponsor_urls=[], npo_urls=[], headings=None):
     if headings is None:
         headings = [""] * len(scribble_urls)
     # BASE_DIR = os.path.dirname("/content/")
@@ -137,7 +147,9 @@ def convert_images_to_pdf(scribble_urls, sponsor_urls=[], npo_urls=[], headings=
     page_no = 1
     colors = colors_list
 
+    logger.info(f"Total scribbles: {len(scribble_urls)}")
     for i, url in enumerate(scribble_urls):
+        logger.info(f"Processing scribble {i + 1} of {len(scribble_urls)} with URL: {url}")
         response = requests.get(url)
         drawing = Image.open(BytesIO(response.content)).resize((2280, 2280))
         paper_width = 2480
@@ -152,13 +164,16 @@ def convert_images_to_pdf(scribble_urls, sponsor_urls=[], npo_urls=[], headings=
         pages.append(bg)
         page_no += 1
 
+    logger.info(f"Total sponsors: {len(sponsor_urls)}")
     if len(sponsor_urls) != 0 and sponsor_urls is not None:
+        logger.info(f"Creating sponsors pages with URLs: {sponsor_urls}")        
         for i in range(0, len(sponsor_urls), 6):
             pages.append(
                 create_sponsors_page("SPONSORS", (255, 127, 0), sponsor_urls[i:min((i + 6), len(sponsor_urls))],
                                      page_no))
             page_no += 1
     if len(npo_urls) != 0 and npo_urls is not None:
+        logger.info(f"Creating NGOs pages with URLs: {npo_urls}")
         for i in range(0, len(npo_urls), 6):
             pages.append(create_sponsors_page("NGOs", (0, 180, 42), npo_urls[i:min((i + 6), len(npo_urls))], page_no))
             page_no += 1
@@ -170,10 +185,11 @@ def convert_images_to_pdf(scribble_urls, sponsor_urls=[], npo_urls=[], headings=
     pdf_bytes.seek(0)  # Go back to the beginning of the BytesIO object
 
     # Upload the final PDF to S3
-    final_pdf_name = "final_magazine.pdf"
+    final_pdf_name = f"{book_name}_final_magazine.pdf"
     s3_handler.upload_file_to_s3(pdf_bytes, final_pdf_name)
     s3_pdf_url = s3_handler.get_s3_url(final_pdf_name)
     print(f"PDF uploaded to S3: {s3_pdf_url}")
+    
     return s3_pdf_url
 
 

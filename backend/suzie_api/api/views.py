@@ -254,20 +254,30 @@ class GenerateBooksView(APIView):
         logger.info("Generating book")        
         try:
             book = Books.objects.get(pk=request.data["id"])            
-            logger.info(f"Book: {book}")
+            logger.info(f"[Book] id: {book.id}, name: {book.name}, cover_url: {book.cover_url}, total_sponsors: {book.total_sponsors}")
 
             bucket = os.getenv("AWS_BUCKET")
             folder = "npos"
             
             npo_urls = [url for url in S3Handler(bucket_name=bucket).get_s3_urls(folder) if url != f"https://{bucket}.s3.amazonaws.com/{folder}/"]
+            logger.info(f"Found {len(npo_urls)} NPO URLs in S3 bucket {bucket} and folder {folder} for book {book.id}")
+            logger.info(f"NPO URLs: {npo_urls}")
+
             scribble_urls = list(set(x.ai_creative_url if x.use_ai else x.creative_url for x in book.drawings.all()))
+            logger.info(f"Found {len(scribble_urls)} scribble URLs for book {book.id}")
+
             sponsor_urls = list(set([x.sponsor_id.logo for x in book.sponsoredbooks_set.all()]))
+            logger.info(f"Found {len(sponsor_urls)} sponsor URLs for book {book.id}")
             
+            logger.info("Converting images to PDF")
             book_url = convert_images_to_pdf(
+                book_name=book.name,
                 scribble_urls=scribble_urls,
                 sponsor_urls=sponsor_urls,
                 npo_urls=npo_urls,
             )
+            logger.info(f"Book URL: {book_url}")
+
             book.url = book_url
             book.save()
         except Exception as error:

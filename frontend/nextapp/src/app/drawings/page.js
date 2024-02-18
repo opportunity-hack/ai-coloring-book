@@ -16,7 +16,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function UploadDrawings() {
   const [file, setFile] = useState(null);
-  const [uploadStatus, setUploadStatus] = useState('');
+  const [uploadStatus, setUploadStatus] = useState("Upload a drawing here");
   const [subject, setSubject] = useState('');
   const [school, setSchool] = useState('');
   const [createdBy, setCreatedBy] = useState('');
@@ -61,13 +61,16 @@ export default function UploadDrawings() {
   };
 
   const handleUpload = async () => {
+    setUploadStatus(null);
     if (!file) {
       alert('Please select a file to upload');
+      setUploadStatus('Please select a file to upload');
       return;
     }
 
     if (userCaptchaInput !== captchaValue) {
       alert(`Incorrect CAPTCHA. Please try again. ${userCaptchaInput} ${captchaValue}`);
+      setUploadStatus('Incorrect CAPTCHA. Please try again.');
       return;
     }
    
@@ -172,7 +175,7 @@ export default function UploadDrawings() {
               />
         </div>
         <div>
-          <Button onClick={handleUpload}>Upload</Button>
+          <Button onClick={handleUpload} disabled={uploadStatus === null}>Upload</Button>
         </div>
         
         {isNotificationActive && (
