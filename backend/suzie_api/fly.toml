@@ -24,7 +24,7 @@ console_command = '/code/manage.py shell'
   processes = ['app']
 
 [[vm]]
-  memory = '512mb'
+  memory = '768mb'
   cpu_kind = 'shared'
   cpus = 1
 
