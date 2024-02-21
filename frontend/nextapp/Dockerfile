@@ -12,6 +12,7 @@ WORKDIR /app
 # Set production environment
 ENV NODE_ENV="production"
 ENV NEXT_PUBLIC_API_URL="https://api.susieqsbooks.org"
+ENV NEXT_PUBLIC_PAYPAL_CLIENT_ID="AfR4ZsiMAaX9BtMv_fjEskAsd194CnSWJXbBEvZAFvfxZXElCZB0WRchzapgOWhZyZoRK9xFvEOaBvi4"
 
 # Throw-away build stage to reduce size of final image
 FROM base as build
