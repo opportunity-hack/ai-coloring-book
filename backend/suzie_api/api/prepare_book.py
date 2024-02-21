@@ -98,16 +98,15 @@ def create_sponsors_page(heading, color, image_urls, page_no):
     draw = prettify_page(draw, heading, color, page_no)
 
     # Calculate the size of each image on the A4 page
-    image_width = (paper_height - 5 * margin) // 3
-    image_height = (paper_height - 5 * margin) // 3
+    target_size = (paper_height - 5 * margin) // 3
 
     # Calculate the number of rows and columns
     num_columns = 2
     num_rows = (len(image_urls) + num_columns - 1) // num_columns  # Round up to the nearest whole number
 
     # Adjust starting positions
-    starting_x = (2480 - image_width * num_columns - margin * (num_columns - 1)) // 2
-    starting_y = 320 + (paper_height - margin * (num_rows + 1) - image_height * num_rows) // 2
+    starting_x = (2480 - target_size * num_columns - margin * (num_columns - 1)) // 2
+    starting_y = 320 + (paper_height - margin * (num_rows + 1) - target_size * num_rows) // 2
 
     
     # Loop through the image URLs and paste them onto the A4 canvas
@@ -116,22 +115,43 @@ def create_sponsors_page(heading, color, image_urls, page_no):
 
     for i, image_url in enumerate(image_urls):
         logger.info(f"Processing image {i + 1} of {total_images} for page {page_no} with URL: {image_url}")
-        # Download the image from the URL
+        # Download and open the image
         response = requests.get(image_url)
         img = Image.open(BytesIO(response.content))
 
-        # Resize the image to fit on the A4 page
-        img = img.resize((image_width, image_height), Image.ANTIALIAS)
+        # Calculate new size keeping aspect ratio
+        aspect_ratio = img.width / img.height
+        if aspect_ratio > 1:
+            # Image is wider
+            new_width = target_size
+            new_height = int(new_width / aspect_ratio)
+        else:
+            # Image is taller or square
+            new_height = target_size
+            new_width = int(new_height * aspect_ratio)
+
+        # Resize the image
+        img = img.resize((new_width, new_height), Image.ANTIALIAS)
+
+        # Create new image with target size and white background
+        new_img = Image.new("RGB", (target_size, target_size), (255, 255, 255))
+
+        # Calculate paste position
+        x = (target_size - new_width) // 2
+        y = (target_size - new_height) // 2
+
+        # Paste the resized image onto the new image
+        new_img.paste(img, (x, y))
 
         # Calculate the position to paste the image
         if (total_images % 2 == 1) and (i == total_images - 1):
-            x = int((2480 - image_width) / 2)
+            x = int((2480 - target_size) / 2)
         else:
-            x = int(starting_x) + ((i % 2) * (image_width + margin))
-        y = int(starting_y) + ((i // 2) * (image_height + margin))
+            x = int(starting_x) + ((i % 2) * (target_size + margin))
+        y = int(starting_y) + ((i // 2) * (target_size + margin))
 
         # Paste the image onto the A4 canvas
-        output_image.paste(img, (x, y))
+        output_image.paste(new_img, (x, y))
 
     # Save the final image
     return output_image

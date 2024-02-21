@@ -92,6 +92,7 @@ function PublishPage(props) {
             setIsNotificationActive={props.setIsNotificationActive}
             setNotificationMessage={props.setNotificationMessage}
             handleDeleteBook={handleDeleteBook}
+            isSponsor={false}
           ></BooksGrid>
           </div>
           <div className={styles.publishButton}>

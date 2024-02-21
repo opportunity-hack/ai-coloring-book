@@ -67,7 +67,7 @@ function UploadLogo(props) {
   
 }
 
-function PaymentPage( {selectedBooks, thankyouPage} ) {
+function PaymentPage( {selectedBooks, thankyouPage, imgFile, sponsorName} ) {
   // Assuming each book costs $10
   console.log('Selected Books Length:', selectedBooks.length);
   const totalAmount = selectedBooks.length * donationAmountPerBook;
@@ -93,29 +93,41 @@ function PaymentPage( {selectedBooks, thankyouPage} ) {
   const onApprove = (data, actions) => {
   return actions.order.capture().then(async (details) => {
     console.log("Payment Successful:", details);
-    
+    console.log("I")
     // Prepare data for the POST request
     const postData = {
       books: selectedBooks.map(book => book.id), // assuming 'id' is the identifier for books
       donation_amount: totalAmount
     };
 
-    try {
-      // Send POST request to your server
-      const response = await axios.post(`${apiUrl}/api/sponsor_pay`, postData, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
-        },
-      });
+    console.log("II")
 
-      console.log('Server response:', response.data);
+    const formData = new FormData();
+    formData.append('file', imgFile);
+    formData.append('books', postData.books);
+    formData.append('donation_amount', totalAmount.toString());
+    formData.append('name', sponsorName);
+
+    console.log("III")
+    console.log(formData)
+    try {
+      
+      console.log("IV")
+      const response = await axios.post(
+        `${apiUrl}/api/sponsor_pay`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
+          },
+      });
+      console.log(response.data.url);
       // Update to navigate to thank you page
       thankyouPage();
+   
     } catch (error) {
       console.error('Failed to send payment confirmation:', error);
-      // Handle error here, maybe navigate to an error page or show a message
     }
+    console.log("V")
   });
 };
 
@@ -150,7 +162,8 @@ export default function Sponsor() {
   const [books, setBooks] = useState([]);
   const [isNotificationActive, setIsNotificationActive] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
-
+  const [sponsorName, setsponsorName] = useState('');
+  
   useEffect(() => {
   const fetchBooks = async () => {
     console.log("getting books..")
@@ -261,8 +274,9 @@ export default function Sponsor() {
                 Select any books to sponsor
             </Text>
               <BooksGrid books={books} handleCardClick={handleCardClick}
-                        setIsNotificationActive={setIsNotificationActive}
-                        setNotificationMessage={setNotificationMessage}
+                setIsNotificationActive={setIsNotificationActive}
+                setNotificationMessage={setNotificationMessage}
+                isSponsor={true}
               />
             </div>
             <div className={styles.publishButton}>
@@ -280,7 +294,7 @@ export default function Sponsor() {
           <>
             <TopNavigation prevStep={prevStep} active={active} setActive={setActive} />
             <div className={styles.paymentContainerMain}>
-               <PaymentPage selectedBooks={selectedBooks} thankyouPage={thankyouPage} />
+              <PaymentPage selectedBooks={selectedBooks} thankyouPage={thankyouPage} imgFile={file} sponsorName={sponsorName} />
             </div>
            
           </>
@@ -330,7 +344,15 @@ export default function Sponsor() {
               </Dropzone>
               {<Text>{uploadStatus}</Text>}
 
+              <Input
+                placeholder="Sponsor name"
+                value={sponsorName}
+                onChange={(e) => {setsponsorName(e.target.value)}}
+              />
+
               <Button onClick={handleUpload}>Upload</Button>
+
+
 
             </div>
             
@@ -370,34 +392,35 @@ export default function Sponsor() {
   };
 
   const handleUpload = async () => {
-    if (!file) {
-      alert('Please select a file to upload');
-      return;
-    }
+    uploadBook();
+    // if (!file) {
+    //   alert('Please select a file to upload');
+    //   return;
+    // }
 
-    const formData = new FormData();
-    formData.append('file', file);
+    // const formData = new FormData();
+    // formData.append('file', file);
 
-    try {
-      console.log(file)
-      console.log(formData)
-      const response = await axios.post(
-        `${apiUrl}/api/sponsor_img`, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
-          },
-      });
-      console.log(response.data.url);
-      setUploadStatus(`Uploaded: ${file.name}`);
-      if (response.data.url) {
-        uploadBook();
+    // try {
+    //   console.log(file)
+    //   console.log(formData)
+    //   const response = await axios.post(
+    //     `${apiUrl}/api/sponsor_img`, formData, {
+    //     headers: {
+    //         'Content-Type': 'multipart/form-data',
+    //         'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
+    //       },
+    //   });
+    //   console.log(response.data.url);
+    //   setUploadStatus(`Uploaded: ${file.name}`);
+    //   if (response.data.url) {
+    //     uploadBook();
         
-      }
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      setUploadStatus('Error in file upload');
-    }
+    //   }
+    // } catch (error) {
+    //   console.error('Error uploading file:', error);
+    //   setUploadStatus('Error in file upload');
+    // }
   };
 
 
@@ -414,7 +437,7 @@ export default function Sponsor() {
   return (
     <>
       <div className={styles.topNav}>
-        <IconLogout2 size="2rem" stroke={1.5} color='black' className={styles.logoutButton} onClick={handleLogout}/>
+        {/* <IconLogout2 size="2rem" stroke={1.5} color='black' className={styles.logoutButton} onClick={handleLogout}/> */}
       </div>
       <div className={styles.rootContainer}>
         <div className={styles.sideNav}>

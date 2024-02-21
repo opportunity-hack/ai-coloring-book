@@ -130,13 +130,19 @@ class SponsorImageViewSet(APIView):
 
 
 class SponsorPayAPIView(APIView):
-    permission_classes = (AllUsers,)
+    permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
         ts = int(datetime.datetime.now().timestamp())
-        sponsor = request.user_obj
-        books = request.data["books"]
-        total_amount = request.data["donation_amount"]
+        # create Sponsor
+        sponsor_raw_img = request.data["file"]
+        uploader = S3Handler(os.getenv("AWS_BUCKET"))
+        url = uploader.upload_image_to_s3(image_file=sponsor_raw_img, file_name=f'sponsors/image_{ts}.jpg')
+        sponsor = Sponsors(name=request.data["name"], logo=url)
+        sponsor.save()
+
+        books = list(map(int, request.data["books"].split(",")))
+        total_amount = float(request.data["donation_amount"])
         amount_per_book = total_amount / len(books)
         sponsored_book_objs = []
         books_list = []
@@ -146,14 +152,14 @@ class SponsorPayAPIView(APIView):
             if book_obj.current_sponsors < book_obj.total_sponsors:
                 book_obj.current_sponsors += 1
                 sponsored_book_objs.append(
-                    SponsoredBooks(sponsor_id=sponsor.sponsors_set.get(), book_id=book_obj, amount=amount_per_book)
+                    SponsoredBooks(sponsor_id=sponsor, book_id=book_obj, amount=amount_per_book)
                 )
                 book_obj.save()
 
         SponsoredBooks.objects.bulk_create(sponsored_book_objs)
 
         # send mail to dr mary
-        self.send_congratulatory_email(sponsor_name=sponsor.sponsors_set.get().name,
+        self.send_congratulatory_email(sponsor_name=sponsor.name,
                                        book_list=[x.name for x in books_list],
                                        donation_amount=total_amount)
 
@@ -208,7 +214,7 @@ class SponsorPayAPIView(APIView):
 class BooksViewSet(viewsets.ModelViewSet):    
     queryset = Books.objects.all()
     serializer_class = BooksSerializer
-    permission_classes = (AllUsers,)
+    permission_classes = (AllowAny,)
 
     def create(self, request, *args, **kwargs):
         logger.info("Creating book")
@@ -251,7 +257,7 @@ class BooksViewSet(viewsets.ModelViewSet):
 
 
 class GenerateBooksView(APIView):
-    permission_classes = (AllUsers,)
+    permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
         logger.info("Generating book")        

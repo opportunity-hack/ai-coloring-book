@@ -10,8 +10,7 @@ import moment from 'moment';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-function Book({ book, handleCardClick, setIsNotificationActive, setNotificationMessage, handleDeleteBook }) {
-  console.log(book);
+function Book({ book, handleCardClick, setIsNotificationActive, setNotificationMessage, handleDeleteBook, isSponsor }) {
   
   const role = localStorage.getItem("role");
 
@@ -113,7 +112,7 @@ function Book({ book, handleCardClick, setIsNotificationActive, setNotificationM
 
         <div className={styles.actionIcons}>
           <IconDownload size="1.5rem" stroke={1.5} className={styles.iconDownload} onClick={handleDownload} />
-          {role !== '2' && 
+          {isSponsor!=true && 
             <IconTrash size="1.5rem" stroke={1.5} color='red' className={styles.iconTrash} onClick={deleteBook} />
           }
         </div>

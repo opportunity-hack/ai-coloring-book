@@ -72,7 +72,12 @@ export default function Home() {
           >
             Login
           </Button>
-          <a href="/drawings">Upload here!</a>
+          <div className={styles.loginFooter}>
+            <a href="/sponsor">Sponsor us ❤️</a>
+            <a href="/drawings">Upload drawings here!</a>
+          </div>
+          
+          
 
 
         </div>
