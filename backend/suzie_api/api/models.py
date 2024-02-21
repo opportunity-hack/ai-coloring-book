@@ -53,7 +53,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # Roles created here
     uid = models.UUIDField(unique=True, editable=False, default=uuid.uuid4, verbose_name='Public identifier')
     email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=30, blank=True)
+    first_name = models.CharField(max_length=50, blank=True)
     last_name = models.CharField(max_length=50, blank=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True, default=3)
     date_joined = models.DateTimeField(auto_now_add=True)
@@ -87,8 +87,8 @@ class TestTable(models.Model):
 class Drawings(models.Model):
     id = models.AutoField(primary_key=True)
     subject = models.CharField(max_length=100, null=True)
-    school = models.CharField(max_length=20, null=True)
-    created_by = models.CharField(max_length=20, null=True)
+    school = models.CharField(max_length=100, null=True)
+    created_by = models.CharField(max_length=100, null=True)
     creative_url = models.TextField(null=True)
     ai_creative_url = models.TextField(null=True)
     use_ai = models.BooleanField(default=True, null=True)
