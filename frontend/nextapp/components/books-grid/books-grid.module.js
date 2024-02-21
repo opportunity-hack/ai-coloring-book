@@ -12,12 +12,13 @@ export default function BooksGrid(props) {
                 {
                     props.books.map(book => (
                             <Book
-                                key={book.id}
-                                book={book}
-                                handleCardClick={() => props.handleCardClick(book.id)}
-                                setIsNotificationActive={props.setIsNotificationActive}
-                                setNotificationMessage={props.setNotificationMessage}
-                                handleDeleteBook={props.handleDeleteBook}
+                            key={book.id}
+                            book={book}
+                            handleCardClick={() => props.handleCardClick(book.id)}
+                            setIsNotificationActive={props.setIsNotificationActive}
+                            setNotificationMessage={props.setNotificationMessage}
+                            handleDeleteBook={props.handleDeleteBook}
+                            isSponsor={props.isSponsor}
                             />
                         )
                     )
