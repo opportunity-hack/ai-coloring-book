@@ -13,6 +13,7 @@ WORKDIR /app
 ENV NODE_ENV="production"
 ENV NEXT_PUBLIC_API_URL="https://api.susieqsbooks.org"
 ENV NEXT_PUBLIC_PAYPAL_CLIENT_ID="AfR4ZsiMAaX9BtMv_fjEskAsd194CnSWJXbBEvZAFvfxZXElCZB0WRchzapgOWhZyZoRK9xFvEOaBvi4"
+ENV NEXT_PUBLIC_DONATION_AMOUNT_PER_BOOK=10
 
 # Throw-away build stage to reduce size of final image
 FROM base as build
