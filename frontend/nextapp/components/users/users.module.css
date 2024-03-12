@@ -1,11 +1,36 @@
-.createUserForm{
+.createUserForm {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     gap: 1rem;
-    width: 500px;
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    padding: 1rem;
 }
-.inputItem{
-    width: 300px;
+
+.inputItem {
+    width: 100%;
+    max-width: 300px;
+}
+
+@media (min-width: 768px) {
+    .createUserForm {
+        width: 500px;
+    }
+
+    .inputItem {
+        width: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .createUserForm {
+        padding: 1rem;
+    }
+    
+    .inputItem {
+        max-width: 280px;
+    }
 }

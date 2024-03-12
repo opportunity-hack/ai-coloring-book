@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@mantine/core';
 import { IconLogout2 } from '@tabler/icons-react';
+import { IconMenu2 } from '@tabler/icons-react';
 import styles from "./page.module.css";
 import { NumberInput } from '@mantine/core';
 import PublishPage from '../../../components/publish/publish.module.js';
@@ -21,8 +22,12 @@ export default function Admin() {
   const [totalSponsors, setTotalSponsors] = useState(1);
   const [isNotificationActive, setIsNotificationActive] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
-  
 
+  const [isMenuOpen, setIsMenuOpen] = useState(true);
+  const handleMenuToggle = () => setIsMenuOpen(!isMenuOpen);
+
+  
+  
 
   useEffect(() => {
     const fetchDrawings = async () => {
@@ -126,8 +131,8 @@ export default function Admin() {
       case 'drawings':
         return (
           <>
+            <h1>Drawings</h1>
             <div className={styles.main}>
-              <h1>Drawings</h1>
               <div className={styles.drawingsContainer}>
                 {drawings.map(drawing => (
                     <Drawing
@@ -179,12 +184,19 @@ export default function Admin() {
   return (
     <>
       <div className={styles.topNav}>
+        <IconMenu2 className={styles.hamburger} size={32} onClick={handleMenuToggle} />
         <IconLogout2 size="2rem" stroke={1.5} color='black' className={styles.logoutButton} onClick={handleLogout}/>
+        
       </div>
+
+ 
+
       <div className={styles.rootContainer}>
+        {isMenuOpen && (
         <div className={styles.sideNav}>
           <NavBar activePage={activePage} navHandler={handleNavClick} />
         </div>
+      )}
         <div className={styles.main}>
           
 

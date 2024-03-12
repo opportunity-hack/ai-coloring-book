@@ -1,19 +1,17 @@
-.main{
+.main {
     width: 100vw;
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-
     background-image: url('https://suzie-kids.s3.us-east-2.amazonaws.com/static/background.jpeg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-
-.loginContainer{
+.loginContainer {
     width: 30vw;
     height: 50vh;
     display: flex;
@@ -26,10 +24,36 @@
     border-radius: 30px;
 }
 
-.loginFooter{
+.loginFooter {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+}
+
+@media (max-width: 768px) {
+    .loginContainer {
+        width: 80vw;
+        height: auto;
+        padding: 2rem;
+    }
+
+    .loginContainer h3, .loginContainer a {
+        font-size: 1.2rem;
+    }
+    
+    .main {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .loginContainer {
+        width: 90vw;
+    }
+    
+    .loginContainer h3, .loginContainer a {
+        font-size: 1rem;
+    }
 }
