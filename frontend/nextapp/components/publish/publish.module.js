@@ -83,9 +83,11 @@ function PublishPage(props) {
     };
 
   return (
-    <div className={styles.publishPage}>
+    <>
+      <h1>Publish Book</h1>
+
         <div className={styles.main}>
-          <h1>Publish Your Book</h1>
+          
           <div className={styles.booksGridContainer}>
           <BooksGrid
             books={books} handleCardClick={handleCardClick}
@@ -101,7 +103,9 @@ function PublishPage(props) {
             </Button>
           </div>
         </div>
-    </div>
+
+    </>
+    
   );
 }
 

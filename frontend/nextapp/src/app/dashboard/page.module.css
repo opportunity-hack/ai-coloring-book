@@ -1,64 +1,114 @@
-.rootContainer{
-    width: 100vw;
-    height: 100vh;
+.rootContainer {
     display: flex;
-
+    flex-direction: column;
 }
-.topNav{
-    width: 100vw;
+
+.topNav {
+    width: 100%;
     height: 60px;
     background-color: #12b886;
     display: flex;
     align-items: center;
 }
-.logoutButton{
+
+.logoutButton {
     margin-left: 10px;
     cursor: pointer;
 }
 
-.sideNav{
-    width: 20vw;
-    height: 100vh;
-    border: 1px solid rgb(133, 131, 131);
-}
-.main{
-    width: 80vw;
-    height: 100vh;
-    display: flex;
-    /* justify-content: center; */
-    align-items: center;
-    flex-direction: column;
+
+
+
+
+.main {
+    width: 100%;
     padding: 10px;
-    /* overflow-y: scroll; */
-}
-.drawingsContainer{
-    margin-top: 10px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 200px);
-    justify-items: center;
-    width: 100%;    
-    overflow-y: scroll; /* Enables vertical scrolling if content overflows */
-    gap: 0.5rem;
+    overflow-y: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
 }
 
-.submitContainer{
-    width: 300px;
+.drawingsContainer {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 10px;
+    height: 70vh;
+    width: 70%;
+    overflow: scroll;
+}
+
+.submitContainer {
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 1rem;
     align-items: center;
     justify-content: center;
-    flex-grow: 1; /* Takes up the remaining space */
-    padding: 20px; /* Adds some spacing around the button */
-
 }
 
-
 .notificationContainer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  margin: 16px;
-  z-index: 1000;
-  width: 300px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 16px;
+    width: auto;
+    right: 16px;
+}
+
+.hamburger {
+  display: block;
+  cursor: pointer;
+}
+
+ .sideNav {
+    width: 100%;
+    border: none;
+    background: #f5f5f5;
+    display: block;
+}
+
+.drawingsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center; 
+    align-items: flex-start;
+    padding: 10px;
+}
+
+@media (min-width: 768px) {
+    .drawingsContainer {
+        justify-content: space-between; 
+    }
+
+    .rootContainer {
+        flex-direction: row;
+    }
+
+    .main {
+        width: 80vw;
+    }
+
+    .drawingsContainer {
+        grid-template-columns: repeat(auto-fill, 200px);
+    }
+
+    .submitContainer {
+        width: 300px;
+    }
+
+
+    .hamburger {
+        display: none;
+    }
+
+    .sideNav{
+        width: 20vw;
+        height: 100vh;
+        border: 1px solid rgb(133, 131, 131);
+    }
 }

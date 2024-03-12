@@ -44,21 +44,25 @@ function TopNavigation(props) {
 function ThankYouMessage() {
   const router = useRouter();
   return (
-    <div className={styles.thankYouContainer}>
-      <h2>Thank You for Your Support!</h2>
-      <p>Your contribution is greatly appreciated and will make a big difference.</p>
-      <Button className={styles.createBookButton} onClick={() => window.location.reload()} color={"pink"}>
-        Home
-      </Button>
-      {/* Add more content or styling as needed */}
-    </div>
+      <>
+        <h3> Thank you for Supporting 🎉 </h3>
+       
+        <div>Your contribution is greatly appreciated and will make a big difference.</div>
+ 
+        <Button className={styles.sponsorBookButton} onClick={() => window.location.reload()} color={"pink"}>
+          Home
+        </Button> 
+      </>
+      
+     
+ 
   );
 }
 
 function UploadLogo(props) {
   return (
     <>
-      <Button className={styles.createBookButton} onClick={props.uploadBook} color={"pink"}>
+      <Button className={styles.sponsorBookButton} onClick={props.uploadBook} color={"pink"}>
         <IconHeart size="1.5rem" stroke={1.5} color='white' fill='white' className={styles.heartDonate} /> Sponsor
       </Button>
     
@@ -269,10 +273,11 @@ export default function Sponsor() {
           <>
             <TopNavigation prevStep={prevStep} active={active} setActive={setActive} />
             
+            <Text size="xl" weight={700} align="center" mt={20} mb={20}>
+                Select books to sponsor!
+              </Text>
             <div className={styles.booksGridContainer}>
-              <Text size="xl" weight={700} align="center" mt={20} mb={20}>
-                Select any books to sponsor
-            </Text>
+              
               <BooksGrid books={books} handleCardClick={handleCardClick}
                 setIsNotificationActive={setIsNotificationActive}
                 setNotificationMessage={setNotificationMessage}
@@ -280,7 +285,7 @@ export default function Sponsor() {
               />
             </div>
             <div className={styles.publishButton}>
-              <Button className={styles.createBookButton} onClick={createBook} color={"pink"}>
+              <Button className={styles.sponsorBookButton} onClick={createBook} color={"pink"}>
                 <IconHeart size="1.5rem" stroke={1.5} color='white' fill='white' className={styles.heartDonate} /> Sponsor
               </Button>
             </div>
@@ -303,6 +308,10 @@ export default function Sponsor() {
         return (
           <>
              <TopNavigation prevStep={prevStep} active={active} setActive={setActive}/>
+            
+            <Text size="xl" inline>
+               Upload logo
+            </Text>
             <div className={styles.uploadContainerMain}>
              
               <Dropzone
@@ -440,9 +449,9 @@ export default function Sponsor() {
         {/* <IconLogout2 size="2rem" stroke={1.5} color='black' className={styles.logoutButton} onClick={handleLogout}/> */}
       </div>
       <div className={styles.rootContainer}>
-        <div className={styles.sideNav}>
+        {/* <div className={styles.sideNav}>
           <NavBar activePage={activePage} navHandler={handleNavClick} />
-        </div>
+        </div> */}
         <div className={styles.main}>
           {isNotificationActive && (
             <div className={styles.notificationContainer}>

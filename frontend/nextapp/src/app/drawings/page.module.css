@@ -1,45 +1,75 @@
-.rootContainer{
+.rootContainer {
     width: 100vw;
-    height: 100vh;
+    padding: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     gap: 1rem;
-    padding: 100px;
 }
-.topNav{
-    width: 100vw;
-    height: 60px;
+
+.topNav {
+    width: 100%;
+    padding: 0.5rem;
     background-color: #12b886;
     display: flex;
     align-items: center;
 }
-.dropZone{
-    width: 60%;
-    height: 50%;
+
+.dropZone {
+    width: 90%;
     border: 1px dashed black;
-    margin-top: 30px;
+    margin-top: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    
 }
 
-/* .refreshCaptcha{
-    width: 200px;
-    height: 300px;
-} */
-
 .notificationContainer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  margin: 16px;
-  z-index: 1000;
-  width: 300px;
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    margin: 1rem;
+    z-index: 1000;
+    width: 90%;
 }
 
 .formInput {
-  width: 500px;  
+    width: 90%;
+}
+
+@media (max-width: 768px) {
+    .rootContainer {
+        padding: 0.5rem;
+    }
+
+    .dropZone {
+        height: auto;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .formInput {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .rootContainer {
+        padding: 0.5rem;
+    }
+
+    .topNav {
+        padding: 0.5rem;
+    }
+
+    .notificationContainer {
+        width: 95%;
+        bottom: 0.5rem;
+        left: 0.5rem;
+    }
+
+    .dropZone {
+        margin-top: 0.5rem;
+    }
 }
