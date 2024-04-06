@@ -8,8 +8,6 @@ import axios from 'axios'; // make sure to install axios if you haven't already
 import Link from 'next/link';
 import { Stack } from '@mantine/core';
 import { Grid } from '@mantine/core';
-import { Text, Title } from '@mantine/core';
-
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -53,52 +51,47 @@ export default function Home() {
   };
 
   return (
-    <div className={styles.main}>      
-
-      <div className={styles.loginContainer}>
-        <Title order={3} textWrap="wrap" >Welcome to Susie Q's Books</Title>      
-        <Text>by <Link target="_blank" href="https://susieqskids.org/" >Susie Q's Kids</Link></Text>      
+    <>
+      <div className={styles.main}>
+        <h1>Admin Login</h1>      
         
-        <Grid>    
-        <Grid.Col span="auto">
-          <Link href="/drawings">        
-            <Button 
-              variant="filled" 
-              color="green" 
-              onClick={handleLogin}
-            >
-              Upload drawing
-            </Button>
-          </Link>
-        </Grid.Col>
-
-        <Grid.Col span="auto">
-          <Link href="/sponsor">        
-            <Button 
-              variant="filled" 
-              color="blue" 
-              onClick={handleLogin}
-            >
-              Sponsor a book
-            </Button>
-          </Link>
-        </Grid.Col>
-        </Grid>
-        </div>
-
-        <div className={styles.loginContainer} style={  {marginTop: "20px", "padding" : "10px"} }>
-        <Text style={ {"padding":"10px" }}>Help us create books from your sketches to support our mission. Each bag we give to a child will include this coloring book, crayons, a soft bear to cuddle, a fuzzy blanket to stay warm, hygiene items to refresh them as they start their new day, inspirational items to motivate them, and journals, games, to make the moments easier to manage.</Text>
-        </div>
-
-        <div style={{ marginTop: "20px", padding: "10px" }}>
-        <Link href="/admin">
-          <Button variant="filled" color="purple">
-            Admin
-          </Button>
+        <Grid style={{margin: "20px"}}>
+        <Link href="/">        
+        <Button 
+            variant="filled" 
+            color="green" 
+            onClick={handleLogin}
+        >
+            Back to Home
+        </Button>
         </Link>
-        </div>
+        </Grid>
 
+        <div className={styles.loginContainer}>
+          <h3>Login</h3>
+          <Input 
+            size="sm" 
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input 
+            size="sm" 
+            placeholder="Password" 
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button 
+            variant="filled" 
+            color="teal" 
+            onClick={handleLogin}
+          >
+            Login
+          </Button>
+        
         </div>
-    
+      </div>
+    </>
   );
 }

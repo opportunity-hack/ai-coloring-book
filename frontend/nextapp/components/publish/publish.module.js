@@ -84,11 +84,11 @@ function PublishPage(props) {
 
   return (
     <>
-      <h1>Publish Book</h1>
+      <h1>Download Book</h1>
 
         <div className={styles.main}>
           
-          <div className={styles.booksGridContainer}>
+          
           <BooksGrid
             books={books} handleCardClick={handleCardClick}
             setIsNotificationActive={props.setIsNotificationActive}
@@ -96,12 +96,8 @@ function PublishPage(props) {
             handleDeleteBook={handleDeleteBook}
             isSponsor={false}
           ></BooksGrid>
-          </div>
-          <div className={styles.publishButton}>
-            <Button className={styles.createBookButton} onClick={createBook} color={"pink"}> 
-              Publish!
-            </Button>
-          </div>
+          
+          
         </div>
 
     </>

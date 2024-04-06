@@ -14,7 +14,7 @@ function NavBar({ activePage, navHandler }) {
         onClick={() => navHandler('drawings')}
       />
       <NavLink
-        label="Publish book"
+        label="Download book"
         leftSection={<IconBook size="1rem" stroke={1.5} />}
         variant="filled"
         active={activePage === 'publish'}

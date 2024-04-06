@@ -10,6 +10,7 @@ import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import axios from 'axios';
 import Captcha from '../../../components/captcha/captcha.module.js';
 import { Notification } from '@mantine/core';
+import Link from 'next/link';
 
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -104,8 +105,15 @@ export default function UploadDrawings() {
       console.log(response.data);
       setUploadStatus(`Uploaded: ${file.name}`);
       console.log(response.data);
+
       setIsNotificationActive(true);
-      setNotificationMessage("Drawing uploaded");
+      setNotificationMessage("Drawing uploaded! Thank you for taking the time to send us this drawing. We will add it to our collection and use it to create a coloring book to support kids in need.");
+      setSubject('');      
+      setCreatedBy('');
+      setFile(null);
+      setUserCaptchaInput('');
+
+      
       handleCaptchaChange(generateCaptcha());
 
     } catch (error) {
@@ -126,11 +134,10 @@ export default function UploadDrawings() {
           onDrop={handleDrop}
           onReject={(files) => 
             {              
-              setUploadStatus("File rejected. Please upload a file that is less than 1mb and is an image file.");              
+              setUploadStatus(<Text>File rejected. Please upload a file that is less than 5MB and is an image file. You can use <Link target='_blank' href="https://squoosh.app/">squoosh.app</Link> to compress the image to make it smaller.</Text>);              
             }
           }                     
-
-          maxSize={1 * 1024 ** 2}
+          maxSize={ 5 * 1024 * 1024 }
           accept={IMAGE_MIME_TYPE}
           className={styles.dropZone}
         >
@@ -159,13 +166,16 @@ export default function UploadDrawings() {
                 Drag images here or click to select files
               </Text>
               <Text size="sm" c="dimmed" inline mt={7}>
-                Attach drawing here, file should not exceed 1mb
+                Attach drawing here
+              </Text>
+              <Text size="sm" c="dimmed" inline mt={7}>
+                Images should not exceed 5 MB
               </Text>
             </div>
           </Group>
         </Dropzone>
                 
-        {<Text>{uploadStatus}</Text>}
+        {uploadStatus}
         
         <TextInput
             placeholder="Title of drawing"

@@ -97,7 +97,7 @@ export default function Admin() {
       );
       console.log(response.data);
       setIsNotificationActive(true)
-      setNotificationMessage("Book created, go to publish page to publish it!")
+      setNotificationMessage("Book created, go to download page next!")
     } catch (error) {
       console.error('Failed to create book:', error);
       // Handle error here

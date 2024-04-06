@@ -41,14 +41,21 @@ cd frontend/nextapp
 npm install
 ```
 
-3. Run the development server:
+3. Create a `.env` file with these contents:
+```
+NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
+NEXT_PUBLIC_PAYPAL_CLIENT_ID=<SANDBOX or PROD Client ID>
+NEXT_PUBLIC_DONATION_AMOUNT_PER_BOOK=10
+```
+
+4. Run the development server:
 ```
 npm run dev
 ```
 
-4. Check the code on localhost:3000.
+5. Check the code on localhost:3000.
 
-5. Test locally like this would be deployed in prod
+6. Test locally like this would be deployed in prod
 ```
 npm run build
 npm start
@@ -60,7 +67,6 @@ npm start
 ```
 fly deploy
 ```
-
 # Setting up backend 
 The normal thing to do is setup MiniConda/Anaconda for local development
 
@@ -74,12 +80,39 @@ Make sure Python is installed with the following versions:
 cd backend/suzie_api
 ```
 
-2. Install dependencies:
+2. Install dependencies
 ```
 pip install -r requirements.txt
 ```
 
-3. Run the migrations:
+3. Create a `.env` file with these contents:
+```
+DB_DATABASE=suziev3
+DB_USER=suqie1
+DB_PASSWORD=<Password>
+DB_HOST=localhost
+DB_PORT=5432
+
+SECRET_KEY=<Should be auto-generate by Django>
+
+ADMIN_EMAIL=<Resend Email Address for "From">
+RECEIVER_EMAIL=<Reply-to email>
+
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=465
+REPLICATE_TOKEN=<Token from Replicate AI that is used to generate images>
+
+RESEND_EMAIL_KEY=<Resend Email key used to send Emails>
+
+# AWS
+AWS_BUCKET=suzie-kids-prod
+AWS_DEFAULT_REGION=us-east-1
+
+AWS_ACCESS_KEY_ID=<KEY>
+AWS_SECRET_ACCESS_KEY=<ACCESS KEY>
+```
+
+3. Run the migrations
 ```
 python manage.py migrate
 ```
@@ -89,7 +122,7 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
-5. Run server:
+5. Run server
 ```
 python manage.py runserver
 ```
