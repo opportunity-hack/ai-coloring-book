@@ -108,6 +108,7 @@ flyctl deploy
 - [DevPost](https://devpost.com/software/from-sketches-to-smiles) submission that started it all.
 - From [2023 Opportuity Hack](https://www.ohack.dev/hack/2023_fall)
 - Supporting nonprofit: [SusieQ's](https://www.ohack.dev/nonprofit/gU9c6wuE1gI8R5IpuUCx) at [susieqskids.org](https://susieqskids.org/)
+- Slack Channel: [#2023-2nd-asu-caffeine-compilers](https://opportunity-hack.slack.com/archives/C060642JYP4)
 
 ## How we built it
 Here's an overview of the components used:
