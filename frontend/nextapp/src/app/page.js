@@ -56,8 +56,8 @@ export default function Home() {
     <div className={styles.main}>      
 
       <div className={styles.loginContainer}>
-        <Title order={3} textWrap="wrap" >Welcome to Susie Q's Books</Title>      
-        <Text>by <Link target="_blank" href="https://susieqskids.org/" >Susie Q's Kids</Link></Text>      
+        <Title order={3} textWrap="wrap" >Welcome to Susie Q&apos;s Books</Title>
+        <Text>by <Link target="_blank" href="https://susieqskids.org/" >Susie Q&apos;s Kids</Link></Text>
         
         <Grid>    
         <Grid.Col span="auto">
