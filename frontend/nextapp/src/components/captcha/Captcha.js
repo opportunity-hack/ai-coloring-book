@@ -1,10 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Button, Input } from '@mantine/core';
-
+"use client";
+import { Input } from '@mantine/core';
 
 function Captcha(props) {
-  
-    
   return (
     <div>
       <div>
@@ -14,8 +11,8 @@ function Captcha(props) {
         placeholder="Enter CAPTCHA"
         value={props.value}
         onChange={props.onChange}
+        aria-label="Type the CAPTCHA letters shown above"
       />
-      
     </div>
   );
 }

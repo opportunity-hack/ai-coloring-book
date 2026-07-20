@@ -1,7 +1,6 @@
 "use client";
 import { Card, Image, Checkbox, Popover, Text} from '@mantine/core';
 import styles from "./drawing.module.css";
-import { useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 
 function Drawing({ drawing, handleCardClick, handleCheckboxChange }) {

@@ -32,13 +32,15 @@
 }
 
 .drawingsContainer {
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
+    justify-content: center;
+    align-items: flex-start;
     padding: 10px;
     height: 70vh;
     width: 70%;
-    overflow: scroll;
+    overflow: auto;
 }
 
 .submitContainer {
@@ -71,18 +73,9 @@
     display: block;
 }
 
-.drawingsContainer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    justify-content: center; 
-    align-items: flex-start;
-    padding: 10px;
-}
-
 @media (min-width: 768px) {
     .drawingsContainer {
-        justify-content: space-between; 
+        justify-content: space-between;
     }
 
     .rootContainer {
@@ -91,10 +84,6 @@
 
     .main {
         width: 80vw;
-    }
-
-    .drawingsContainer {
-        grid-template-columns: repeat(auto-fill, 200px);
     }
 
     .submitContainer {
