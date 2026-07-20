@@ -1,59 +1,304 @@
-.main {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background-image: url('https://suzie-kids.s3.us-east-2.amazonaws.com/static/background.jpeg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+/* ---- Hero ---- */
+
+.hero {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 3.5rem 1.25rem 2rem;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 2.5rem;
+  align-items: center;
 }
 
-.loginContainer {
-    width: 30vw;
-    padding: 2rem 5rem 2rem 2rem;    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 1rem;
-    border: 1px solid rgba(0, 0, 0, 0.479);
-    background-color: rgba(255, 255, 255, 0.904);
-    border-radius: 30px;
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
-.loginFooter {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+.heroTitle {
+  font-family: var(--font-fredoka), sans-serif;
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+/* crayon-swipe highlight behind the key phrase */
+.heroHighlight {
+  background-image: linear-gradient(
+    104deg,
+    transparent 0.5%,
+    #ffe066 3%,
+    #ffd43b 60%,
+    #ffe066 97%,
+    transparent 99%
+  );
+  background-size: 100% 45%;
+  background-position: 0 80%;
+  background-repeat: no-repeat;
+  padding: 0 0.15em;
+}
+
+.heroSubhead {
+  font-size: 1.1rem;
+  line-height: 1.65;
+  color: #4a4a52;
+  max-width: 34rem;
+}
+
+.heroCtas {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.primaryCta {
+  display: inline-block;
+  background: #12b886;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.05rem;
+  text-decoration: none;
+  padding: 0.8rem 1.75rem;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  align-self: flex-start;
+}
+
+.primaryCta:hover,
+.primaryCta:focus-visible {
+  background: #0ca678;
+}
+
+.secondaryCta {
+  display: inline-block;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 1.05rem;
+  text-decoration: none;
+  padding: 0.8rem 1.75rem;
+  border-radius: 999px;
+  border: 2px solid var(--ink);
+}
+
+.secondaryCta:hover,
+.secondaryCta:focus-visible {
+  background: #fff3bf;
+}
+
+/* ---- Sections ---- */
+
+.section {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 3rem 1.25rem;
+}
+
+.sectionTitle {
+  font-family: var(--font-fredoka), sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 1.25rem;
+  /* crayon underline */
+  display: table;
+  background-image: linear-gradient(
+    100deg,
+    transparent 1%,
+    #96f2d7 5%,
+    #63e6be 55%,
+    #96f2d7 95%,
+    transparent 99%
+  );
+  background-size: 100% 0.35em;
+  background-position: 0 95%;
+  background-repeat: no-repeat;
+  padding-bottom: 0.25em;
+}
+
+.sectionBody {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #4a4a52;
+  max-width: 44rem;
+}
+
+.sectionBody a {
+  color: #0ca678;
+  font-weight: 600;
+}
+
+/* ---- How it works ---- */
+
+.steps {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  counter-reset: step;
+}
+
+.stepCard {
+  background: #fff;
+  border: 2.5px solid var(--ink);
+  border-radius: 225px 15px 245px 15px / 15px 245px 15px 225px;
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.stepBadge {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  background: #ffd43b;
+  border: 2px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-fredoka), sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+
+.stepTitle {
+  font-family: var(--font-fredoka), sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.stepBody {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #4a4a52;
+}
+
+/* ---- Teachers ---- */
+
+.benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #4a4a52;
+  max-width: 44rem;
+}
+
+.benefits li {
+  padding-left: 1.75rem;
+  position: relative;
+}
+
+.benefits li::before {
+  content: "✏️";
+  position: absolute;
+  left: 0;
+}
+
+.benefits strong {
+  color: var(--ink);
+}
+
+.geoNote {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #4a4a52;
+  max-width: 44rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ---- Sponsor band ---- */
+
+.sponsorBand {
+  background: #fff;
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  max-width: none;
+  text-align: center;
+}
+
+.sponsorBand > * {
+  max-width: 1080px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sponsorBand .sectionBody {
+  margin-bottom: 1.5rem;
+}
+
+/* ---- FAQ ---- */
+
+.faqList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 44rem;
+}
+
+.faqItem {
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.faqQuestion {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 1rem 1.25rem;
+  list-style-position: inside;
+}
+
+.faqQuestion:hover {
+  background: #fff9db;
+}
+
+.faqAnswer {
+  padding: 0 1.25rem 1.25rem;
+  line-height: 1.65;
+  color: #4a4a52;
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 900px) {
+  .steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
-    .loginContainer {
-        width: 80vw;
-        height: auto;
-        padding: 2rem;
-    }
+  .hero {
+    grid-template-columns: 1fr;
+    padding-top: 2.5rem;
+    gap: 2rem;
+  }
 
-    .loginContainer h3, .loginContainer a {
-        font-size: 1.2rem;
-    }
-    
-    .main {
-        padding: 20px;
-    }
+  .heroCtas a {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+
+  .section {
+    padding: 2.25rem 1.25rem;
+  }
 }
 
-@media (max-width: 480px) {
-    .loginContainer {
-        width: 90vw;
-    }
-    
-    .loginContainer h3, .loginContainer a {
-        font-size: 1rem;
-    }
+@media (max-width: 560px) {
+  .steps {
+    grid-template-columns: 1fr;
+  }
 }

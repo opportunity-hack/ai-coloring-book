@@ -19,16 +19,17 @@ function Drawing({ drawing, handleCardClick, handleCheckboxChange }) {
             <Popover.Target>
             <Image onMouseEnter={open} onMouseLeave={close}
             src={drawing.url}
-            height={100}
-            alt={drawing.label}            
+            h={100}
+            fit="cover"
+            alt={drawing.label || drawing.subject || 'Uploaded drawing'}
             />
           </Popover.Target>
-          <Popover.Dropdown style={{ pointerEvents: 'none' }}>          
+          <Popover.Dropdown style={{ pointerEvents: 'none' }}>
             <Image
               src={drawing.url}
-              height={300}              
+              h={300}
               fit="contain"
-              alt={drawing.label}
+              alt={drawing.label || drawing.subject || 'Uploaded drawing'}
             />
           </Popover.Dropdown>
           </Popover>

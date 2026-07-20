@@ -62,7 +62,8 @@ function Book({ book, handleCardClick, setIsNotificationActive, setNotificationM
         <Image
           src={book.url}
           alt={book.label ? `Cover of ${book.label}` : 'Coloring book cover'}
-          height={100}
+          h={100}
+          fit="cover"
         />
 
         <Text size="xs"><IconCalendarEvent size={19} />{formatBookDate(book.created_on)}</Text>

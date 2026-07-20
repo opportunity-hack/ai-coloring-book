@@ -10,6 +10,7 @@ import Drawing from '@/components/drawing/Drawing';
 import Users from '@/components/users/Users';
 import { getDrawings, createBook as apiCreateBook } from '@/lib/api';
 import { clearSession } from '@/lib/auth';
+import { trackBookPdfDownload } from '@/lib/analytics';
 
 export default function Admin() {
   const router = useRouter();
@@ -135,6 +136,7 @@ export default function Admin() {
         return <PublishPage
                   setIsNotificationActive={setIsNotificationActive}
                   setNotificationMessage={setNotificationMessage}
+                  onDownload={(book) => trackBookPdfDownload({ bookId: book.id, bookName: book.label })}
                 />;
       case 'users':
         return <Users
