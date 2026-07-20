@@ -1,5 +1,5 @@
 # From Sketches to Smiles: A Coloring Book that Gives Back
-Deployed at [susieqsbooks.org](https://susieqsbooks.org/) using [fly.io](https://fly.io).
+Deployed at [susieqsbooks.org](https://susieqsbooks.org/) — frontend on [Vercel](https://vercel.com), backend API on [fly.io](https://fly.io) at `api.susieqsbooks.org`.
 
 ## Inspiration
 The **From Sketches to Smiles Project** aims to create an exceptional coloring book by harnessing the creativity of children's sketches and the power of AI. Our mission extends beyond just producing amazing coloring books; we also have a strong commitment to giving back to our community, especially kids in need, through [SusieQ's](https://www.ohack.dev/nonprofit/gU9c6wuE1gI8R5IpuUCx) Kids Comfort Bag program.
@@ -41,12 +41,7 @@ cd frontend/nextapp
 npm install
 ```
 
-3. Create a `.env` file with these contents:
-```
-NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
-NEXT_PUBLIC_PAYPAL_CLIENT_ID=<SANDBOX or PROD Client ID>
-NEXT_PUBLIC_DONATION_AMOUNT_PER_BOOK=10
-```
+3. Create a `.env` file — copy `.env.example` and fill in the values (API URL, PayPal client ID, donation amount, and optionally the GA measurement ID).
 
 4. Run the development server:
 ```
@@ -55,18 +50,24 @@ npm run dev
 
 5. Check the code on localhost:3000.
 
-6. Test locally like this would be deployed in prod
+6. Run the tests and a production build:
 ```
+npm test
 npm run build
 npm start
 ```
 
-## Deploy on fly.io
+## Deploy on Vercel
 
-1. Install required packages:
+See [frontend/nextapp/DEPLOYMENT.md](frontend/nextapp/DEPLOYMENT.md) for the
+Vercel setup, environment variables, and the susieqsbooks.org DNS cutover
+checklist. Quick version from `frontend/nextapp`:
 ```
-fly deploy
+vercel          # preview
+vercel --prod   # production
 ```
+(The `Dockerfile`/`fly.toml` in `frontend/nextapp` are legacy fly.io artifacts
+kept until the DNS cutover is verified.)
 # Setting up backend 
 The normal thing to do is setup MiniConda/Anaconda for local development
 
