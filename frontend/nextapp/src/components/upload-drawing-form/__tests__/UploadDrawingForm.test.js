@@ -35,6 +35,9 @@ describe("UploadDrawingForm", () => {
     expect(
       screen.getByText("Pick your school so we know where your book goes")
     ).toBeInTheDocument();
+    expect(
+      screen.getByText("Pick your grade so your art lines up with your classmates'")
+    ).toBeInTheDocument();
     expect(uploadDrawing).not.toHaveBeenCalled();
   });
 

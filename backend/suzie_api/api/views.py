@@ -75,6 +75,7 @@ class CreateDrawingsViewSet(viewsets.ModelViewSet):
 
         sanitized_data = {
             "school": request.data.get("school"),
+            "grade": request.data.get("grade"),
             "created_by": request.data.get("created_by"),
             "subject": subject,
             "creative_url": creative_url,

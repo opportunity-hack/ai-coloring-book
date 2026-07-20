@@ -88,6 +88,7 @@ class Drawings(models.Model):
     id = models.AutoField(primary_key=True)
     subject = models.CharField(max_length=100, null=True)
     school = models.CharField(max_length=100, null=True)
+    grade = models.CharField(max_length=20, null=True)
     created_by = models.CharField(max_length=100, null=True)
     creative_url = models.TextField(null=True)
     ai_creative_url = models.TextField(null=True)

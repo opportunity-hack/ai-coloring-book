@@ -1,12 +1,13 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Button, TextInput, Text, Group, rem, CloseButton } from "@mantine/core";
+import { Button, TextInput, Select, Text, Group, rem, CloseButton } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { IconUpload, IconPhoto, IconX, IconConfetti } from "@tabler/icons-react";
 import styles from "./upload-drawing-form.module.css";
 import Captcha from "@/components/captcha/Captcha";
 import SchoolSelect from "@/components/school-select/SchoolSelect";
+import { GRADES } from "@/data/grades";
 import { uploadDrawing } from "@/lib/api";
 import { generateCaptcha, validateCaptcha } from "@/lib/captcha";
 import { trackDrawingUploadSuccess } from "@/lib/analytics";
@@ -40,6 +41,7 @@ export default function UploadDrawingForm() {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [subject, setSubject] = useState("");
   const [school, setSchool] = useState("");
+  const [grade, setGrade] = useState(null);
   const [createdBy, setCreatedBy] = useState("");
   const [captchaValue, setCaptchaValue] = useState("");
   const [userCaptchaInput, setUserCaptchaInput] = useState("");
@@ -98,6 +100,7 @@ export default function UploadDrawingForm() {
     if (!file) nextErrors.file = "Oops — add your drawing first!";
     if (!subject.trim()) nextErrors.subject = "Give your drawing a name";
     if (!school.trim()) nextErrors.school = "Pick your school so we know where your book goes";
+    if (!grade) nextErrors.grade = "Pick your grade so your art lines up with your classmates'";
     if (!validateCaptcha(userCaptchaInput, captchaValue)) {
       nextErrors.captcha = "Those letters don't match — try once more";
     }
@@ -115,11 +118,12 @@ export default function UploadDrawingForm() {
       formData.append("image", file);
       formData.append("subject", subject.trim());
       formData.append("school", school.trim());
+      formData.append("grade", grade);
       formData.append("created_by", createdBy.trim());
 
       await uploadDrawing(formData);
 
-      trackDrawingUploadSuccess({ school: school.trim() });
+      trackDrawingUploadSuccess({ school: school.trim(), grade });
       setSubmittedSchool(school.trim());
       setIsSuccess(true);
     } catch (error) {
@@ -222,6 +226,22 @@ export default function UploadDrawingForm() {
           clearError("school");
         }}
         error={errors.school}
+      />
+
+      <Select
+        label="Grade"
+        description="Drawings are grouped by grade in the book"
+        placeholder="Pick your grade"
+        size="lg"
+        radius="md"
+        data={GRADES}
+        value={grade}
+        onChange={(value) => {
+          setGrade(value);
+          clearError("grade");
+        }}
+        error={errors.grade}
+        checkIconPosition="right"
       />
 
       <TextInput

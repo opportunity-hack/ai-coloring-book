@@ -11,6 +11,7 @@ import Users from '@/components/users/Users';
 import { getDrawings, createBook as apiCreateBook } from '@/lib/api';
 import { clearSession } from '@/lib/auth';
 import { trackBookPdfDownload } from '@/lib/analytics';
+import { groupByGrade } from '@/data/grades';
 
 export default function Admin() {
   const router = useRouter();
@@ -103,14 +104,26 @@ export default function Admin() {
             <h1>Drawings</h1>
             <div className={styles.main}>
               <div className={styles.drawingsContainer}>
-                {drawings.map(drawing => (
-                    <Drawing
-                      key={drawing.id}
-                      drawing={drawing}
-                      handleCardClick={() => handleCardClick(drawing.id)}
-                      handleCheckboxChange={() => handleCheckboxChange(drawing.id)}
-                    />
-                  ))}
+                {groupByGrade(drawings, (drawing) => drawing.grade).map((group) => (
+                  <section key={group.grade} className={styles.gradeSection}>
+                    <h2 className={styles.gradeHeader}>
+                      {group.grade}
+                      <span className={styles.gradeCount}>
+                        {group.items.length} drawing{group.items.length === 1 ? '' : 's'}
+                      </span>
+                    </h2>
+                    <div className={styles.gradeDrawings}>
+                      {group.items.map(drawing => (
+                        <Drawing
+                          key={drawing.id}
+                          drawing={drawing}
+                          handleCardClick={() => handleCardClick(drawing.id)}
+                          handleCheckboxChange={() => handleCheckboxChange(drawing.id)}
+                        />
+                      ))}
+                    </div>
+                  </section>
+                ))}
               </div>
               <div className={styles.submitContainer}>
                 <NumberInput

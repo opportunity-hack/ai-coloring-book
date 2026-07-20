@@ -34,8 +34,9 @@ function Drawing({ drawing, handleCardClick, handleCheckboxChange }) {
           </Popover.Dropdown>
           </Popover>
 
-          <Text size='md'>{drawing.subject}</Text>          
+          <Text size='md'>{drawing.subject}</Text>
           <Text size="sm">School: {drawing.school}</Text>
+          {drawing.grade && <Text size="sm">Grade: {drawing.grade}</Text>}
           <Text size="sm">Created by: {drawing.created_by ? drawing.created_by : "-"}</Text>
           <Text size="sm">Uploaded: {drawing.created_on}</Text>
             
