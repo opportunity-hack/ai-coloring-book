@@ -3,3 +3,28 @@
   padding: 0;
   margin: 0;
 }
+
+:root {
+  --paper: #fffbf3;
+  --ink: #2b2b33;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 3px solid #12b886;
+  outline-offset: 2px;
+}
