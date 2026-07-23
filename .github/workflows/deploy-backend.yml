@@ -6,6 +6,9 @@ on:
     paths: ["backend/suzie_api/**", ".github/workflows/deploy-backend.yml"]
   workflow_dispatch: {}
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -16,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - uses: superfly/flyctl-actions/setup-flyctl@1.5
 
       - name: Deploy to Fly.io
         run: flyctl deploy --remote-only
