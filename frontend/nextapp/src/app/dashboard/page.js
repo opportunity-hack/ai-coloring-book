@@ -1,28 +1,52 @@
 "use client";
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, NumberInput, Notification } from '@mantine/core';
-import { IconLogout2, IconMenu2 } from '@tabler/icons-react';
+import Link from 'next/link';
+import { Button, NumberInput, Notification, Skeleton } from '@mantine/core';
+import { IconLogout2, IconPalette, IconBook2, IconUsers } from '@tabler/icons-react';
 import styles from "./page.module.css";
+import chrome from '@/components/admin/page-chrome.module.css';
+import HeartDoodle from '@/components/heart-doodle/HeartDoodle';
 import PublishPage from '@/components/publish/PublishPage';
-import NavBar from '@/components/nav-bar/NavBar';
 import Drawing from '@/components/drawing/Drawing';
 import Users from '@/components/users/Users';
 import { getDrawings, createBook as apiCreateBook } from '@/lib/api';
-import { clearSession } from '@/lib/auth';
+import { clearSession, getSession, ROLES } from '@/lib/auth';
 import { trackBookPdfDownload } from '@/lib/analytics';
 import { groupByGrade } from '@/data/grades';
+
+// The Users tab is site-admin only; school admins manage just their school's
+// drawings and books.
+const TABS = [
+  { key: 'drawings', label: 'Drawings', icon: IconPalette },
+  { key: 'publish', label: 'Books', icon: IconBook2 },
+  { key: 'users', label: 'Users', icon: IconUsers, adminOnly: true },
+];
 
 export default function Admin() {
   const router = useRouter();
   const [drawings, setDrawings] = useState([]);
+  const [isLoadingDrawings, setIsLoadingDrawings] = useState(true);
   const [activePage, setActivePage] = useState('drawings');
   const [totalSponsors, setTotalSponsors] = useState(1);
-  const [isNotificationActive, setIsNotificationActive] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState('');
+  const [isCreatingBook, setIsCreatingBook] = useState(false);
+  const [notification, setNotification] = useState(null);
+  const [session, setSessionInfo] = useState(null);
 
-  const [isMenuOpen, setIsMenuOpen] = useState(true);
-  const handleMenuToggle = () => setIsMenuOpen(!isMenuOpen);
+  const notify = (message, type = 'success') => setNotification({ message, type });
+
+  useEffect(() => {
+    setSessionInfo(getSession());
+  }, []);
+
+  const isSchoolAdmin = session?.role === ROLES.SCHOOL_ADMIN;
+  const visibleTabs = TABS.filter((tab) => !tab.adminOnly || !isSchoolAdmin);
+
+  useEffect(() => {
+    if (!notification) return undefined;
+    const timer = setTimeout(() => setNotification(null), 6000);
+    return () => clearTimeout(timer);
+  }, [notification]);
 
   useEffect(() => {
     const fetchDrawings = async () => {
@@ -31,60 +55,53 @@ export default function Admin() {
         setDrawings(response.data);
       } catch (error) {
         console.error('Failed to fetch drawings:', error);
-        setIsNotificationActive(true);
-        setNotificationMessage('Could not load drawings. Please refresh and try again.');
+        notify('Could not load drawings. Please refresh and try again.', 'error');
+      } finally {
+        setIsLoadingDrawings(false);
       }
     };
 
     fetchDrawings();
   }, []);
 
-  // Function to handle card selection
   const handleCardClick = (id) => {
-    const updatedDrawings = drawings.map(drawing => {
-      if (drawing.id === id) {
-        return { ...drawing, selected: !drawing.selected };
-      }
-      return drawing;
-    });
-    setDrawings(updatedDrawings);
+    setDrawings((current) =>
+      current.map((drawing) =>
+        drawing.id === id ? { ...drawing, selected: !drawing.selected } : drawing
+      )
+    );
   };
 
-  // Function to handle checkbox change
-  const handleCheckboxChange = (id) => {
-    const updatedDrawings = drawings.map(drawing => {
-      if (drawing.id === id) {
-        return { ...drawing, useAI: !drawing.useAI };
-      }
-      return drawing;
-    });
-    setDrawings(updatedDrawings);
+  const handleAiToggle = (id) => {
+    setDrawings((current) =>
+      current.map((drawing) =>
+        drawing.id === id ? { ...drawing, useAI: !drawing.useAI } : drawing
+      )
+    );
   };
 
-  const handleTotalSponsorsChange = (value) => {
-    setTotalSponsors(value);
-  };
+  const selectedCount = drawings.filter((drawing) => drawing.selected).length;
 
   const createBook = async () => {
-    const selectedDrawings = drawings.filter(drawing => drawing.selected);
+    const selectedDrawings = drawings.filter((drawing) => drawing.selected);
     const requestBody = {
       drawings: selectedDrawings,
       totalSponsors: totalSponsors,
     };
 
+    setIsCreatingBook(true);
     try {
       await apiCreateBook(requestBody);
-      setIsNotificationActive(true);
-      setNotificationMessage("Book created, go to download page next!");
+      setDrawings((current) =>
+        current.map((drawing) => ({ ...drawing, selected: false }))
+      );
+      notify('Book created! Open the Books tab to download the PDF.');
     } catch (error) {
       console.error('Failed to create book:', error);
-      setIsNotificationActive(true);
-      setNotificationMessage('Could not create the book. Please try again.');
+      notify('Could not create the book. Please try again.', 'error');
+    } finally {
+      setIsCreatingBook(false);
     }
-  };
-
-  const handleNavClick = (page) => {
-    setActivePage(page);
   };
 
   const handleLogout = () => {
@@ -92,100 +109,163 @@ export default function Admin() {
     router.push('/');
   };
 
-  const handleNotificationDismiss = () => {
-    setIsNotificationActive(false);
+  const renderDrawings = () => {
+    if (isLoadingDrawings) {
+      return (
+        <div className={styles.gradeGrid} aria-hidden="true">
+          {Array.from({ length: 8 }, (_, i) => (
+            <Skeleton key={i} height={252} radius={12} />
+          ))}
+        </div>
+      );
+    }
+
+    if (drawings.length === 0) {
+      return (
+        <div className={chrome.emptyState}>
+          <p className={chrome.emptyTitle}>No drawings yet</p>
+          <p className={chrome.emptyText}>
+            Share the upload page with your classrooms to start collecting art.
+          </p>
+          <Button component={Link} href="/drawings" variant="light">
+            Open the upload page
+          </Button>
+        </div>
+      );
+    }
+
+    return (
+      <>
+        <div className={styles.gradeSections}>
+          {groupByGrade(drawings, (drawing) => drawing.grade).map((group) => (
+            <section key={group.grade} className={styles.gradeSection}>
+              <h2 className={styles.gradeHeader}>
+                {group.grade}
+                <span className={styles.gradeCount}>
+                  {group.items.length} drawing{group.items.length === 1 ? '' : 's'}
+                </span>
+              </h2>
+              <div className={styles.gradeGrid}>
+                {group.items.map((drawing) => (
+                  <Drawing
+                    key={drawing.id}
+                    drawing={drawing}
+                    handleCardClick={() => handleCardClick(drawing.id)}
+                    handleCheckboxChange={() => handleAiToggle(drawing.id)}
+                  />
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+
+        <div className={styles.actionBar}>
+          <p className={styles.selectionCount}>
+            <strong>{selectedCount}</strong> drawing{selectedCount === 1 ? '' : 's'} selected
+          </p>
+          <NumberInput
+            label="Total sponsors"
+            min={1}
+            max={100}
+            value={totalSponsors}
+            onChange={setTotalSponsors}
+            className={styles.sponsorInput}
+          />
+          <Button
+            onClick={createBook}
+            loading={isCreatingBook}
+            disabled={selectedCount === 0}
+          >
+            Create book
+          </Button>
+        </div>
+      </>
+    );
   };
 
   const renderActivePage = () => {
     switch (activePage) {
       case 'drawings':
         return (
-          <>
-            <h1>Drawings</h1>
-            <div className={styles.main}>
-              <div className={styles.drawingsContainer}>
-                {groupByGrade(drawings, (drawing) => drawing.grade).map((group) => (
-                  <section key={group.grade} className={styles.gradeSection}>
-                    <h2 className={styles.gradeHeader}>
-                      {group.grade}
-                      <span className={styles.gradeCount}>
-                        {group.items.length} drawing{group.items.length === 1 ? '' : 's'}
-                      </span>
-                    </h2>
-                    <div className={styles.gradeDrawings}>
-                      {group.items.map(drawing => (
-                        <Drawing
-                          key={drawing.id}
-                          drawing={drawing}
-                          handleCardClick={() => handleCardClick(drawing.id)}
-                          handleCheckboxChange={() => handleCheckboxChange(drawing.id)}
-                        />
-                      ))}
-                    </div>
-                  </section>
-                ))}
-              </div>
-              <div className={styles.submitContainer}>
-                <NumberInput
-                  label="Total sponsors"
-                  placeholder="Sponsors"
-                  min={1}
-                  max={100}
-                  value={totalSponsors}
-                  onChange={handleTotalSponsorsChange}
-                />
-                <Button
-                  className={styles.createBookButton}
-                  onClick={createBook}
-                  disabled={drawings.filter(drawing => drawing.selected).length <= 0}
-                >
-                  Create book
-                </Button>
-              </div>
-            </div>
-          </>
+          <section>
+            <header className={chrome.pageHead}>
+              <h1 className={chrome.pageTitle}>Drawings</h1>
+              <p className={chrome.pageSub}>
+                Tap drawings to pick which ones go into the next book. The switch on
+                each card controls whether the AI-traced coloring page is used.
+              </p>
+            </header>
+            {renderDrawings()}
+          </section>
         );
       case 'publish':
-        return <PublishPage
-                  setIsNotificationActive={setIsNotificationActive}
-                  setNotificationMessage={setNotificationMessage}
-                  onDownload={(book) => trackBookPdfDownload({ bookId: book.id, bookName: book.label })}
-                />;
+        return (
+          <PublishPage
+            notify={notify}
+            onDownload={(book) => trackBookPdfDownload({ bookId: book.id, bookName: book.label })}
+          />
+        );
       case 'users':
-        return <Users
-                  setIsNotificationActive={setIsNotificationActive}
-                  setNotificationMessage={setNotificationMessage}
-                />;
+        return <Users notify={notify} />;
       default:
         return null;
     }
   };
 
   return (
-    <>
-      <div className={styles.topNav}>
-        <IconMenu2 className={styles.hamburger} size={32} onClick={handleMenuToggle} />
-        <IconLogout2 size="2rem" stroke={1.5} color='black' className={styles.logoutButton} onClick={handleLogout} aria-label="Log out" />
-      </div>
+    <div className={styles.shell}>
+      <header className={styles.topBar}>
+        <div className={styles.topBarInner}>
+          <Link href="/" className={styles.wordmark}>
+            <HeartDoodle size={20} />
+            <span>Susie Q&apos;s Books</span>
+          </Link>
+          <span className={styles.adminBadge}>
+            {isSchoolAdmin && session?.school ? session.school : 'Admin'}
+          </span>
+          <div className={styles.topBarRight}>
+            {session?.email && <span className={styles.userEmail}>{session.email}</span>}
+            <Button
+              variant="subtle"
+              color="gray"
+              size="compact-sm"
+              leftSection={<IconLogout2 size={16} stroke={1.8} />}
+              onClick={handleLogout}
+            >
+              Log out
+            </Button>
+          </div>
+        </div>
+        <nav className={styles.tabs} aria-label="Admin sections">
+          {visibleTabs.map(({ key, label, icon: Icon }) => (
+            <button
+              key={key}
+              type="button"
+              className={`${styles.tab} ${activePage === key ? styles.tabActive : ''}`}
+              aria-current={activePage === key ? 'page' : undefined}
+              onClick={() => setActivePage(key)}
+            >
+              <Icon size={17} stroke={1.8} />
+              {label}
+            </button>
+          ))}
+        </nav>
+      </header>
 
-      <div className={styles.rootContainer}>
-        {isMenuOpen && (
-        <div className={styles.sideNav}>
-          <NavBar activePage={activePage} navHandler={handleNavClick} />
+      <main className={styles.main}>{renderActivePage()}</main>
+
+      {notification && (
+        <div className={styles.notificationContainer}>
+          <Notification
+            color={notification.type === 'error' ? 'red' : 'brand'}
+            title={notification.type === 'error' ? 'Something went wrong' : 'Done!'}
+            withBorder
+            onClose={() => setNotification(null)}
+          >
+            {notification.message}
+          </Notification>
         </div>
       )}
-        <div className={styles.main}>
-          {isNotificationActive && (
-            <div className={styles.notificationContainer}>
-              <Notification color="green" title="Notification" onClose={handleNotificationDismiss}>
-                {notificationMessage}
-              </Notification>
-            </div>
-          )}
-
-          {renderActivePage()}
-        </div>
-      </div>
-    </>
+    </div>
   );
 }

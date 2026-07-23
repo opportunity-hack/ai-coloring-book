@@ -1,44 +1,51 @@
-.card{
-    width: 250px;
-    height: 300px;
-    padding: 5px;
-    flex-grow: 1;
-    margin: 0px;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.selectedCard{
-    border: 2px solid #007bff; 
-    box-shadow: 0 0 15px #007bff;
+.card {
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.cardImage{
-    height: 100px; /* Set the height you desire */
-     
+.coverWrap {
+  border-bottom: 2px solid var(--ink);
+  background: #fff;
 }
 
-.actionIcons{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    justify-content: center;
+.body {
+  padding: 0.7rem 0.85rem 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.progressBar{
-    height: 200px;
-    width: 100%;
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
-.progressLabel {
-  color: black; /* Sets the font color to black */
-  width: 100%; /* Ensures the label takes the full width of the parent */
-  text-align: center; /* Centers the text within the label */
-  position: absolute; /* Positions the label */
-  left: 0; /* Aligns the label to the left of the parent */
-  top: 50%; /* Positions the label at 50% from the top of the parent */
-  transform: translateY(-50%); /* Adjusts the label's position to be vertically centered */
+.metaDate {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  color: #7a7a82;
+}
+
+.sponsors {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.actions {
+  margin-top: auto;
+  padding: 0.6rem 0.85rem 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
 }

@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
-import { Select, TextInput } from "@mantine/core";
+import Link from "next/link";
+import { Select, Text, TextInput } from "@mantine/core";
 import { SCHOOL_GROUPS, SCHOOL_NOT_LISTED } from "@/data/schools";
 import { trackSchoolNotListed } from "@/lib/analytics";
 
@@ -48,17 +49,23 @@ export default function SchoolSelect({ onChange, error, size = "lg" }) {
         checkIconPosition="right"
       />
       {choice === SCHOOL_NOT_LISTED && (
-        <TextInput
-          label="Your school and city"
-          description="We use this to plan where Susie Q's Books goes next"
-          placeholder="e.g. Desert Sun Elementary, Surprise, AZ"
-          size={size}
-          radius="md"
-          value={customSchool}
-          onChange={handleCustomSchool}
-          error={error}
-          mt="xs"
-        />
+        <>
+          <TextInput
+            label="Your school and city"
+            description="We use this to plan where Susie Q's Books goes next"
+            placeholder="e.g. Desert Sun Elementary, Surprise, AZ"
+            size={size}
+            radius="md"
+            value={customSchool}
+            onChange={handleCustomSchool}
+            error={error}
+            mt="xs"
+          />
+          <Text size="sm" c="dimmed" mt={6}>
+            Want your school to join for real?{" "}
+            <Link href="/add-school">Ask us to add it</Link> — it&apos;s free.
+          </Text>
+        </>
       )}
     </>
   );

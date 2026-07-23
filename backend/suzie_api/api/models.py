@@ -41,13 +41,13 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     # These fields tie to the roles!
     ADMIN = 1
-    MANAGER = 2
-    EMPLOYEE = 3
+    SPONSOR = 2
+    SCHOOL_ADMIN = 3
 
     ROLE_CHOICES = (
         (ADMIN, 'Admin'),
-        (MANAGER, 'Manager'),
-        (EMPLOYEE, 'Employee')
+        (SPONSOR, 'Sponsor'),
+        (SCHOOL_ADMIN, 'School Admin')
     )
 
     # Roles created here
@@ -55,7 +55,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=50, blank=True)
     last_name = models.CharField(max_length=50, blank=True)
-    role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True, default=3)
+    role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True, default=None)
+    # School admins are scoped to a single school; the value must exactly match
+    # the school strings stored on Drawings rows (see frontend src/data/schools.js).
+    school = models.CharField(max_length=100, null=True, blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     is_deleted = models.BooleanField(default=False)

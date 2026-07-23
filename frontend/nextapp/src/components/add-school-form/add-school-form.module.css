@@ -1,0 +1,69 @@
+/* Hand-drawn card outline, same trick as the landing hero and upload form. */
+.card {
+  background: #fff;
+  border: 2.5px solid var(--ink);
+  border-radius: 225px 15px 245px 15px / 15px 245px 15px 225px;
+  padding: 2rem 1.75rem 2.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.row {
+  display: flex;
+  gap: 1rem;
+}
+
+.grow {
+  flex: 1;
+}
+
+/* Visually gone but still in the form for bots to trip on. */
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.6rem;
+  padding: 1.5rem 0.5rem;
+}
+
+.successIcon {
+  color: #12b886;
+}
+
+.successTitle {
+  font-family: var(--font-fredoka), sans-serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.successText {
+  color: #4a4a52;
+  line-height: 1.65;
+  max-width: 28rem;
+}
+
+.successActions {
+  margin-top: 0.75rem;
+}
+
+@media (max-width: 540px) {
+  .row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .card {
+    padding: 1.5rem 1.15rem 1.75rem;
+  }
+}

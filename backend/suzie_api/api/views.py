@@ -15,7 +15,7 @@ import os
 import replicate
 from io import BytesIO
 from dotenv import load_dotenv
-from api.permission import IsAdmin, AllUsers
+from api.permission import IsAdmin, AllUsers, IsStaffAdmin, get_request_user
 from api.s3_handler import S3Handler
 
 # Setup logger
@@ -33,10 +33,12 @@ NPO_URLS = ['https://shorturl.at/lz457'] * 11
 class DrawingsViewSet(viewsets.ModelViewSet):
     queryset = Drawings.objects.all()
     serializer_class = DrawingsSerializer
-    permission_classes = (IsAdmin,)
+    permission_classes = (IsStaffAdmin,)
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
+        if request.user_obj.role == UserModel.SCHOOL_ADMIN:
+            queryset = queryset.filter(school=request.user_obj.school)
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -212,16 +214,38 @@ class SponsorPayAPIView(APIView):
             print(f"Failed to send email. Error: {e}")
 
 
-class BooksViewSet(viewsets.ModelViewSet):    
+class BooksViewSet(viewsets.ModelViewSet):
     queryset = Books.objects.all()
     serializer_class = BooksSerializer
-    permission_classes = (AllowAny,)
+
+    def get_permissions(self):
+        # The public sponsor page lists books; everything that mutates is staff-only.
+        if self.action in ('list', 'retrieve'):
+            return [AllowAny()]
+        return [IsStaffAdmin()]
+
+    def get_queryset(self):
+        queryset = Books.objects.all()
+        # School admins only see (and can only delete) books containing their
+        # school's drawings; anonymous/sponsor and site-admin traffic sees all.
+        user = get_request_user(self.request)
+        if user is not None and user.role == UserModel.SCHOOL_ADMIN:
+            queryset = queryset.filter(drawings__school=user.school).distinct()
+        return queryset
 
     def create(self, request, *args, **kwargs):
         logger.info("Creating book")
         logger.info(request.data)
 
         drawings = request.data["drawings"]
+        if request.user_obj.role == UserModel.SCHOOL_ADMIN:
+            drawing_ids = [d["id"] for d in drawings]
+            foreign = Drawings.objects.filter(id__in=drawing_ids).exclude(school=request.user_obj.school)
+            if foreign.exists():
+                return Response(
+                    {"message": "You can only create books from your school's drawings."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
         total_sponsors = request.data["totalSponsors"]
         ts = int(datetime.datetime.now().timestamp())
         # Make ts human readable and use underscores instead of spaces
@@ -258,12 +282,18 @@ class BooksViewSet(viewsets.ModelViewSet):
 
 
 class GenerateBooksView(APIView):
-    permission_classes = (AllowAny,)
+    permission_classes = (IsStaffAdmin,)
 
     def post(self, request, *args, **kwargs):
-        logger.info("Generating book")        
+        logger.info("Generating book")
         try:
-            book = Books.objects.get(pk=request.data["id"])            
+            book = Books.objects.get(pk=request.data["id"])
+            if request.user_obj.role == UserModel.SCHOOL_ADMIN and \
+                    book.drawings.exclude(school=request.user_obj.school).exists():
+                return Response(
+                    {"message": "You can only generate books for your school."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
             logger.info(f"[Book] id: {book.id}, name: {book.name}, cover_url: {book.cover_url}, total_sponsors: {book.total_sponsors}")
 
             bucket = os.getenv("AWS_BUCKET")
@@ -300,12 +330,82 @@ class GenerateBooksView(APIView):
         return Response({"id": book.id, "url": book_url})
 
 
+class SchoolRequestView(APIView):
+    """Public 'add my school' form: validates and emails the request to the admins."""
+    permission_classes = (AllowAny,)
+
+    REQUIRED_FIELDS = ("name", "email", "school_name", "city", "state")
+    OPTIONAL_FIELDS = ("requester_role", "students_estimate", "message")
+    MAX_LENGTHS = {
+        "name": 100, "email": 150, "school_name": 150, "city": 100,
+        "state": 50, "requester_role": 50, "students_estimate": 20, "message": 2000,
+    }
+
+    def post(self, request, *args, **kwargs):
+        # Honeypot: real users never fill this hidden field; bots do.
+        if request.data.get("website"):
+            return Response({"success": True})
+
+        data = {}
+        for field in self.REQUIRED_FIELDS + self.OPTIONAL_FIELDS:
+            value = str(request.data.get(field, "") or "").strip()
+            if field in self.REQUIRED_FIELDS and not value:
+                return Response(
+                    {"success": False, "message": f"Missing required field: {field}"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            data[field] = value[: self.MAX_LENGTHS[field]]
+
+        rows = "".join(
+            f"<p><strong>{label}:</strong> {data[field] or '-'}</p>"
+            for label, field in (
+                ("Name", "name"), ("Email", "email"), ("School", "school_name"),
+                ("City", "city"), ("State", "state"), ("They are a", "requester_role"),
+                ("Estimated students", "students_estimate"), ("Message", "message"),
+            )
+        )
+        email_body = f"""
+                <html>
+                <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <h2>New school request from susieqsbooks.org</h2>
+                {rows}
+                <p>Reply to {data['email']} to follow up, then add the school to
+                the site's school list.</p>
+                </body>
+                </html>
+                """
+
+        try:
+            resend.Emails.send({
+                "from": os.getenv("ADMIN_EMAIL"),
+                "to": os.getenv("RECEIVER_EMAIL", os.getenv("ADMIN_EMAIL")),
+                "reply_to": data["email"],
+                "subject": f"School request: {data['school_name']} ({data['city']}, {data['state']})",
+                "html": email_body,
+            })
+        except Exception as e:
+            logger.error(f"Failed to send school request email: {e}")
+            return Response(
+                {"success": False, "message": "Could not send the request. Please try again."},
+                status=status.HTTP_502_BAD_GATEWAY,
+            )
+
+        return Response({"success": True})
+
+
 class UserRegistrationView(APIView):
     serializer_class = UserRegistrationSerializer
     permission_classes = (IsAdmin,)
 
     def post(self, request):
-        organization = request.data.pop("organization")
+        organization = request.data.pop("organization", "")
+
+        if str(request.data.get("role")) == str(UserModel.SCHOOL_ADMIN) and not request.data.get("school"):
+            return Response(
+                {'success': False, 'message': 'School admins must be assigned a school.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         serializer = self.serializer_class(data=request.data)
         valid = serializer.is_valid(raise_exception=True)
 
@@ -313,7 +413,7 @@ class UserRegistrationView(APIView):
             serializer.save()
             status_code = status.HTTP_201_CREATED
             user_data = serializer.data
-            if user_data["role"] == 2:
+            if user_data["role"] == UserModel.SPONSOR:
                 Sponsors(name=organization, user_id=UserModel.objects.get(pk=user_data["id"])).save()
 
             response = {
@@ -344,8 +444,10 @@ class UserLoginView(APIView):
                 'access': serializer.data['access'],
                 'refresh': serializer.data['refresh'],
                 'authenticatedUser': {
+                    'id': serializer.data['id'],
                     'email': serializer.data['email'],
-                    'role': serializer.data['role']
+                    'role': serializer.data['role'],
+                    'school': serializer.data['school']
                 }
             }
 

@@ -45,4 +45,15 @@ describe("RequireAdmin", () => {
     expect(screen.getByText("secret dashboard")).toBeInTheDocument();
     expect(replace).not.toHaveBeenCalled();
   });
+
+  it("renders children for school admins", () => {
+    setSession({ userId: 9, role: 3, email: "t@school.org", accessToken: "tok", school: "Susick Elementary" });
+    render(
+      <RequireAdmin>
+        <p>secret dashboard</p>
+      </RequireAdmin>
+    );
+    expect(screen.getByText("secret dashboard")).toBeInTheDocument();
+    expect(replace).not.toHaveBeenCalled();
+  });
 });

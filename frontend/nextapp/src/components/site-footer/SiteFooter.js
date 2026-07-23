@@ -31,6 +31,9 @@ export default function SiteFooter() {
               <Link href="/sponsor">Sponsor a book</Link>
             </li>
             <li>
+              <Link href="/add-school">Add your school</Link>
+            </li>
+            <li>
               <Link href="/#faq">Questions teachers ask us</Link>
             </li>
             <li>

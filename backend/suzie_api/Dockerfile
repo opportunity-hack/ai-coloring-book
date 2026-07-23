@@ -24,4 +24,6 @@ COPY . /code
 
 EXPOSE 8000
 
-CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "suzie_api.wsgi"]
+# --timeout must exceed a cold-boot Replicate run (upload_drawings blocks on it);
+# threads keep other requests flowing while a worker waits on Replicate.
+CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "--threads", "4", "--timeout", "180", "suzie_api.wsgi"]
