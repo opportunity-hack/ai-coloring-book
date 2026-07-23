@@ -1,97 +1,88 @@
 "use client";
-import Image from "next/image";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from "./page.module.css";
-import { Input, Button } from '@mantine/core';
-import axios from 'axios'; // make sure to install axios if you haven't already
+import { Input, Button, Text } from '@mantine/core';
 import Link from 'next/link';
-import { Stack } from '@mantine/core';
-import { Grid } from '@mantine/core';
+import { login } from '@/lib/api';
+import { setSession, ROLES } from '@/lib/auth';
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
-export default function Home() {
+export default function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
-  const handleLogin = async () => {
+  const handleLogin = async (event) => {
+    event?.preventDefault();
+    setError('');
+    setIsSubmitting(true);
     try {
-      const response = await axios.post(`${apiUrl}/api/login`, {
-        email,
-        password
-      });
+      const response = await login(email, password);
 
-      // Check if the login was successful
       if (response.data && response.data.success) {
-        // Store the role, email, and access token in local storage
-        console.log(response.data)
-        localStorage.setItem('user_id', response.data.authenticatedUser.id);
-        localStorage.setItem('role', response.data.authenticatedUser.role);
-        localStorage.setItem('email', response.data.authenticatedUser.email);
-        localStorage.setItem('accessToken', response.data.access);
+        setSession({
+          userId: response.data.authenticatedUser.id,
+          role: response.data.authenticatedUser.role,
+          email: response.data.authenticatedUser.email,
+          accessToken: response.data.access,
+        });
 
-        if (localStorage.getItem("role") == 1) {
-          console.log("Admin logged in successfully");
+        if (Number(response.data.authenticatedUser.role) === ROLES.ADMIN) {
           router.push('/dashboard');
         } else {
-          console.log("Sponsor logged in successfully");
           router.push('/sponsor');
-          
         }
       } else {
-        console.error("Login failed: ", response.data.message);
-        // Handle login failure
+        setError(response.data?.message || 'Login failed. Please check your email and password.');
       }
-    } catch (error) {
-      console.error("An error occurred during login: ", error.response ? error.response.data : error.message);
-      // Handle errors from the server or network issues
+    } catch (err) {
+      console.error("An error occurred during login: ", err.response ? err.response.data : err.message);
+      setError('Login failed. Please check your email and password.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <>
-      <div className={styles.main}>
-        <h1>Admin Login</h1>      
-        
-        <Grid style={{margin: "20px"}}>
-        <Link href="/">        
-        <Button 
-            variant="filled" 
-            color="green" 
-            onClick={handleLogin}
-        >
-            Back to Home
-        </Button>
-        </Link>
-        </Grid>
+    <div className={styles.main}>
+      <h1>Admin Login</h1>
 
-        <div className={styles.loginContainer}>
-          <h3>Login</h3>
-          <Input 
-            size="sm" 
+      <div style={{ margin: "20px" }}>
+        <Button component={Link} href="/" variant="filled" color="green">
+          Back to Home
+        </Button>
+      </div>
+
+      <div className={styles.loginContainer}>
+        <h3>Login</h3>
+        <form onSubmit={handleLogin}>
+          <Input
+            size="sm"
             placeholder="Email"
+            type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <Input 
-            size="sm" 
-            placeholder="Password" 
+          <Input
+            size="sm"
+            placeholder="Password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Button 
-            variant="filled" 
-            color="teal" 
-            onClick={handleLogin}
+          {error && <Text c="red" size="sm">{error}</Text>}
+          <Button
+            type="submit"
+            variant="filled"
+            color="teal"
+            loading={isSubmitting}
           >
             Login
           </Button>
-        
-        </div>
+        </form>
       </div>
-    </>
+    </div>
   );
 }

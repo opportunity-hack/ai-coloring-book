@@ -106,7 +106,7 @@ class DrawingsGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Drawings  # Replace with your actual model
-        fields = ['id', 'selected', 'subject', 'school', 'created_by', 'url', 'useAI', 'is_active', 'created_on', 'modified_on']
+        fields = ['id', 'selected', 'subject', 'school', 'grade', 'created_by', 'url', 'useAI', 'is_active', 'created_on', 'modified_on']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)

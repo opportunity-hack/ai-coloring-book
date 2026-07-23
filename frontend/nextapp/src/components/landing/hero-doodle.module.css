@@ -1,0 +1,44 @@
+.pair {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.panel {
+  background: #fff;
+  border: 2.5px solid var(--ink);
+  /* hand-drawn wobble */
+  border-radius: 235px 18px 225px 16px / 16px 225px 18px 245px;
+  padding: 1rem 1rem 0.5rem;
+  width: min(300px, 80vw);
+  margin: 0;
+}
+
+.panel:first-of-type {
+  transform: rotate(-1.5deg);
+}
+
+.panel:last-of-type {
+  transform: rotate(1.2deg);
+}
+
+.scene {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.caption {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #5a5a62;
+  padding: 0.4rem 0 0.5rem;
+}
+
+.arrow {
+  width: 48px;
+  flex-shrink: 0;
+  transform: rotate(90deg);
+}

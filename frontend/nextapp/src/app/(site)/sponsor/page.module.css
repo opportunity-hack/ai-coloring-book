@@ -1,0 +1,57 @@
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem;
+}
+
+.intro {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 2rem;
+}
+
+.title {
+  font-family: var(--font-fredoka), sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0.75rem;
+}
+
+.valueProp {
+  font-size: 1.1rem;
+  line-height: 1.65;
+  color: #4a4a52;
+  margin-bottom: 1rem;
+}
+
+.trustList {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  font-size: 0.95rem;
+  color: #4a4a52;
+}
+
+.trustList li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.trustList li::before {
+  content: "✓";
+  font-weight: 700;
+  color: #12b886;
+}
+
+@media (max-width: 640px) {
+  .trustList {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+}

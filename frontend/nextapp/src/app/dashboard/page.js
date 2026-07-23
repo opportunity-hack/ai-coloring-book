@@ -1,19 +1,17 @@
 "use client";
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@mantine/core';
-import { IconLogout2 } from '@tabler/icons-react';
-import { IconMenu2 } from '@tabler/icons-react';
+import { Button, NumberInput, Notification } from '@mantine/core';
+import { IconLogout2, IconMenu2 } from '@tabler/icons-react';
 import styles from "./page.module.css";
-import { NumberInput } from '@mantine/core';
-import PublishPage from '../../../components/publish/publish.module.js';
-import NavBar from '../../../components/nav-bar/nav.module.js';
-import Drawing from '../../../components/drawing/drawing.module.js';
-import Users from '../../../components/users/users.module.js';
-import axios from 'axios';
-import { Notification } from '@mantine/core';
-
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+import PublishPage from '@/components/publish/PublishPage';
+import NavBar from '@/components/nav-bar/NavBar';
+import Drawing from '@/components/drawing/Drawing';
+import Users from '@/components/users/Users';
+import { getDrawings, createBook as apiCreateBook } from '@/lib/api';
+import { clearSession } from '@/lib/auth';
+import { trackBookPdfDownload } from '@/lib/analytics';
+import { groupByGrade } from '@/data/grades';
 
 export default function Admin() {
   const router = useRouter();
@@ -26,25 +24,15 @@ export default function Admin() {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
   const handleMenuToggle = () => setIsMenuOpen(!isMenuOpen);
 
-  
-  
-
   useEffect(() => {
     const fetchDrawings = async () => {
       try {
-        console.log(apiUrl)
-        const response = await axios.get(
-          `${apiUrl}/api/drawings/`, {
-        headers: {
-              'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
-          },
-      }
-        );
-        setDrawings(response.data); // Assuming the response data is in the format you need
+        const response = await getDrawings();
+        setDrawings(response.data);
       } catch (error) {
         console.error('Failed to fetch drawings:', error);
-        // Handle error here, e.g., show a message to the user
+        setIsNotificationActive(true);
+        setNotificationMessage('Could not load drawings. Please refresh and try again.');
       }
     };
 
@@ -81,26 +69,17 @@ export default function Admin() {
     const selectedDrawings = drawings.filter(drawing => drawing.selected);
     const requestBody = {
       drawings: selectedDrawings,
-      totalSponsors: totalSponsors, // include total sponsors in the request body
+      totalSponsors: totalSponsors,
     };
-    
-    console.log('Request Body:', requestBody);
 
     try {
-      const response = await axios.post(
-        `${apiUrl}/api/books/`, requestBody, {
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
-          },
-        }
-      );
-      console.log(response.data);
-      setIsNotificationActive(true)
-      setNotificationMessage("Book created, go to download page next!")
+      await apiCreateBook(requestBody);
+      setIsNotificationActive(true);
+      setNotificationMessage("Book created, go to download page next!");
     } catch (error) {
       console.error('Failed to create book:', error);
-      // Handle error here
+      setIsNotificationActive(true);
+      setNotificationMessage('Could not create the book. Please try again.');
     }
   };
 
@@ -109,18 +88,9 @@ export default function Admin() {
   };
 
   const handleLogout = () => {
-    // Clear local storage
-    localStorage.clear();
+    clearSession();
     router.push('/');
   };
-
-
-  
-
-  useEffect(() => {
-    setIsNotificationActive(false);
-    setNotificationMessage("");
-  }, []);
 
   const handleNotificationDismiss = () => {
     setIsNotificationActive(false);
@@ -134,14 +104,26 @@ export default function Admin() {
             <h1>Drawings</h1>
             <div className={styles.main}>
               <div className={styles.drawingsContainer}>
-                {drawings.map(drawing => (
-                    <Drawing
-                      key={drawing.id}
-                      drawing={drawing}
-                      handleCardClick={() => handleCardClick(drawing.id)}
-                      handleCheckboxChange={() => handleCheckboxChange(drawing.id)}
-                    />
-                  ))}
+                {groupByGrade(drawings, (drawing) => drawing.grade).map((group) => (
+                  <section key={group.grade} className={styles.gradeSection}>
+                    <h2 className={styles.gradeHeader}>
+                      {group.grade}
+                      <span className={styles.gradeCount}>
+                        {group.items.length} drawing{group.items.length === 1 ? '' : 's'}
+                      </span>
+                    </h2>
+                    <div className={styles.gradeDrawings}>
+                      {group.items.map(drawing => (
+                        <Drawing
+                          key={drawing.id}
+                          drawing={drawing}
+                          handleCardClick={() => handleCardClick(drawing.id)}
+                          handleCheckboxChange={() => handleCheckboxChange(drawing.id)}
+                        />
+                      ))}
+                    </div>
+                  </section>
+                ))}
               </div>
               <div className={styles.submitContainer}>
                 <NumberInput
@@ -160,16 +142,14 @@ export default function Admin() {
                   Create book
                 </Button>
               </div>
-
             </div>
-            
           </>
-          
         );
       case 'publish':
         return <PublishPage
                   setIsNotificationActive={setIsNotificationActive}
                   setNotificationMessage={setNotificationMessage}
+                  onDownload={(book) => trackBookPdfDownload({ bookId: book.id, bookName: book.label })}
                 />;
       case 'users':
         return <Users
@@ -180,16 +160,13 @@ export default function Admin() {
         return null;
     }
   };
-  
+
   return (
     <>
       <div className={styles.topNav}>
         <IconMenu2 className={styles.hamburger} size={32} onClick={handleMenuToggle} />
-        <IconLogout2 size="2rem" stroke={1.5} color='black' className={styles.logoutButton} onClick={handleLogout}/>
-        
+        <IconLogout2 size="2rem" stroke={1.5} color='black' className={styles.logoutButton} onClick={handleLogout} aria-label="Log out" />
       </div>
-
- 
 
       <div className={styles.rootContainer}>
         {isMenuOpen && (
@@ -198,9 +175,6 @@ export default function Admin() {
         </div>
       )}
         <div className={styles.main}>
-          
-
-
           {isNotificationActive && (
             <div className={styles.notificationContainer}>
               <Notification color="green" title="Notification" onClose={handleNotificationDismiss}>
@@ -209,10 +183,9 @@ export default function Admin() {
             </div>
           )}
 
- 
           {renderActivePage()}
         </div>
-      </div> 
+      </div>
     </>
   );
 }

@@ -1,0 +1,41 @@
+.captcha {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.codeRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.code {
+  display: inline-flex;
+  gap: 0.35rem;
+  background: #fff3bf;
+  border: 2px solid var(--ink, #2b2b33);
+  border-radius: 10px;
+  padding: 0.5rem 0.9rem;
+  user-select: none;
+}
+
+.char {
+  font-family: var(--font-fredoka), sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--ink, #2b2b33);
+}
+
+.char:nth-child(odd) {
+  transform: rotate(-6deg) translateY(1px);
+}
+
+.char:nth-child(even) {
+  transform: rotate(5deg) translateY(-1px);
+}
+
+.char:nth-child(3n) {
+  transform: rotate(-2deg) translateY(2px);
+}
