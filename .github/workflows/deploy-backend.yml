@@ -12,7 +12,9 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    concurrency: deploy-backend-group
+    concurrency:
+      group: deploy-backend-group
+      cancel-in-progress: false
     defaults:
       run:
         working-directory: backend/suzie_api
@@ -22,6 +24,6 @@ jobs:
       - uses: superfly/flyctl-actions/setup-flyctl@1.5
 
       - name: Deploy to Fly.io
-        run: flyctl deploy --remote-only
+        run: flyctl deploy --remote-only --app susieqsbooks-backend-1
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
