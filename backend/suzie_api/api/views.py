@@ -25,6 +25,12 @@ logger = logging.getLogger(__name__)
 load_dotenv()
 
 resend.api_key = os.getenv("RESEND_EMAIL_KEY")
+# Resend requires the "from" address to use a domain verified in the Resend
+# dashboard. notify.susieqsbooks.org is the verified sending domain; ADMIN_EMAIL
+# (which may be any inbox, e.g. a personal Gmail address) is only used as the
+# recipient/reply-to address, never as the "from" address.
+DEFAULT_RESEND_FROM_EMAIL = "Susie Q's Coloring Book <noreply@notify.susieqsbooks.org>"
+RESEND_FROM_EMAIL = os.getenv("RESEND_FROM_EMAIL", DEFAULT_RESEND_FROM_EMAIL)
 UserModel = get_user_model()
 
 NPO_URLS = ['https://shorturl.at/lz457'] * 11
@@ -204,7 +210,7 @@ class SponsorPayAPIView(APIView):
         # Sending the email
         try:
             r = resend.Emails.send({
-              "from": os.getenv("ADMIN_EMAIL"),
+              "from": RESEND_FROM_EMAIL,
                 "to": os.getenv("RECEIVER_EMAIL"),
                 "subject": "We have a Sponsor!",
                 "html": email_body
@@ -377,7 +383,7 @@ class SchoolRequestView(APIView):
 
         try:
             resend.Emails.send({
-                "from": os.getenv("ADMIN_EMAIL"),
+                "from": RESEND_FROM_EMAIL,
                 "to": os.getenv("RECEIVER_EMAIL", os.getenv("ADMIN_EMAIL")),
                 "reply_to": data["email"],
                 "subject": f"School request: {data['school_name']} ({data['city']}, {data['state']})",

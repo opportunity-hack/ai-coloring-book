@@ -34,6 +34,10 @@ SMTP_PORT=465
 REPLICATE_TOKEN=
 
 RESEND_EMAIL_KEY=
+# "From" address for Resend emails. Must use a domain verified in the Resend
+# dashboard (https://resend.com/domains) - notify.susieqsbooks.org is verified;
+# ADMIN_EMAIL/RECEIVER_EMAIL can be any inbox since they are only used as recipients.
+RESEND_FROM_EMAIL=Susie Q's Coloring Book <noreply@notify.susieqsbooks.org>
 
 # AWS
 AWS_BUCKET=
