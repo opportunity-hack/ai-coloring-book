@@ -2,23 +2,18 @@
 import styles from "./books-grid.module.css";
 import Book from '../book/Book';
 
-export default function BooksGrid(props) {
+export default function BooksGrid({ books, notify, handleDeleteBook, onDownload }) {
     return (
         <div className={styles.booksContainer}>
-            {
-                props.books.map(book => (
-                    <Book
-                        key={book.id}
-                        book={book}
-                        handleCardClick={() => props.handleCardClick(book.id)}
-                        setIsNotificationActive={props.setIsNotificationActive}
-                        setNotificationMessage={props.setNotificationMessage}
-                        handleDeleteBook={props.handleDeleteBook}
-                        isSponsor={props.isSponsor}
-                        onDownload={props.onDownload}
-                    />
-                ))
-            }
+            {books.map(book => (
+                <Book
+                    key={book.id}
+                    book={book}
+                    notify={notify}
+                    handleDeleteBook={handleDeleteBook}
+                    onDownload={onDownload}
+                />
+            ))}
         </div>
     );
 }

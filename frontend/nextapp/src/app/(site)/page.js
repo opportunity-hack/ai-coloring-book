@@ -108,9 +108,14 @@ export default function Home() {
           Gilbert, Scottsdale, Tempe, Glendale, and Peoria — alongside our
           founding schools in Warren and Sterling Heights, Michigan.
         </p>
-        <Link href="/drawings" className={styles.primaryCta}>
-          Start with your class
-        </Link>
+        <div className={styles.teacherCtas}>
+          <Link href="/drawings" className={styles.primaryCta}>
+            Start with your class
+          </Link>
+          <Link href="/add-school" className={styles.secondaryCta}>
+            School not listed? Add it
+          </Link>
+        </div>
       </section>
 
       {/* For sponsors */}

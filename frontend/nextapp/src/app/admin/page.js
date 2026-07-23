@@ -1,9 +1,11 @@
 "use client";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from "./page.module.css";
-import { Input, Button, Text } from '@mantine/core';
 import Link from 'next/link';
+import { TextInput, PasswordInput, Button, Alert } from '@mantine/core';
+import { IconAlertCircle } from '@tabler/icons-react';
+import styles from "./page.module.css";
+import HeartDoodle from '@/components/heart-doodle/HeartDoodle';
 import { login } from '@/lib/api';
 import { setSession, ROLES } from '@/lib/auth';
 
@@ -27,9 +29,11 @@ export default function AdminLogin() {
           role: response.data.authenticatedUser.role,
           email: response.data.authenticatedUser.email,
           accessToken: response.data.access,
+          school: response.data.authenticatedUser.school,
         });
 
-        if (Number(response.data.authenticatedUser.role) === ROLES.ADMIN) {
+        const role = Number(response.data.authenticatedUser.role);
+        if (role === ROLES.ADMIN || role === ROLES.SCHOOL_ADMIN) {
           router.push('/dashboard');
         } else {
           router.push('/sponsor');
@@ -46,43 +50,54 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className={styles.main}>
-      <h1>Admin Login</h1>
+    <main className={styles.main}>
+      <Link href="/" className={styles.wordmark}>
+        <HeartDoodle />
+        <span>Susie Q&apos;s Books</span>
+      </Link>
 
-      <div style={{ margin: "20px" }}>
-        <Button component={Link} href="/" variant="filled" color="green">
-          Back to Home
-        </Button>
-      </div>
+      <div className={styles.card}>
+        <h1 className={styles.title}>Welcome back</h1>
+        <p className={styles.subtitle}>
+          Sign in to manage drawings, books, and sponsors.
+        </p>
 
-      <div className={styles.loginContainer}>
-        <h3>Login</h3>
-        <form onSubmit={handleLogin}>
-          <Input
-            size="sm"
-            placeholder="Email"
+        <form onSubmit={handleLogin} className={styles.form}>
+          <TextInput
+            label="Email"
             type="email"
+            autoComplete="email"
+            placeholder="you@example.org"
+            required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <Input
-            size="sm"
-            placeholder="Password"
-            type="password"
+          <PasswordInput
+            label="Password"
+            autoComplete="current-password"
+            placeholder="Your password"
+            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {error && <Text c="red" size="sm">{error}</Text>}
-          <Button
-            type="submit"
-            variant="filled"
-            color="teal"
-            loading={isSubmitting}
-          >
-            Login
+          {error && (
+            <Alert
+              color="red"
+              variant="light"
+              icon={<IconAlertCircle size={16} />}
+            >
+              {error}
+            </Alert>
+          )}
+          <Button type="submit" fullWidth size="md" loading={isSubmitting}>
+            Sign in
           </Button>
         </form>
       </div>
-    </div>
+
+      <Link href="/" className={styles.backLink}>
+        ← Back to susieqsbooks.org
+      </Link>
+    </main>
   );
 }

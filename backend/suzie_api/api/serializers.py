@@ -42,7 +42,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             'id',
             'email',
             'password',
-            'role'
+            'role',
+            'school'
         )
 
     def create(self, validated_data):
@@ -56,6 +57,8 @@ class UserLoginSerializer(serializers.Serializer):
     access = serializers.CharField(read_only=True)
     refresh = serializers.CharField(read_only=True)
     role = serializers.CharField(read_only=True)
+    id = serializers.IntegerField(read_only=True)
+    school = serializers.CharField(read_only=True, allow_null=True)
 
     def create(self, validated_date):
         pass
@@ -83,6 +86,8 @@ class UserLoginSerializer(serializers.Serializer):
                 'refresh': refresh_token,
                 'email': user.email,
                 'role': user.role,
+                'id': user.id,
+                'school': user.school,
             }
 
             return validation

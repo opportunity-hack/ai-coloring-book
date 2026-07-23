@@ -1,11 +1,13 @@
 "use client";
 import { useEffect, useState } from 'react';
-import styles from './publish.module.css';
+import { Skeleton } from '@mantine/core';
+import chrome from '@/components/admin/page-chrome.module.css';
 import BooksGrid from '../books-grid/BooksGrid';
 import { getBooks } from '@/lib/api';
 
-function PublishPage(props) {
+function PublishPage({ notify, onDownload }) {
   const [books, setBooks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -14,7 +16,6 @@ function PublishPage(props) {
 
         const transformedBooks = response.data.map(book => ({
           id: book.id,
-          selected: false,
           label: book.name,
           url: book.cover_url,
           book_url: book.url,
@@ -30,8 +31,9 @@ function PublishPage(props) {
         setBooks(sortedBooks);
       } catch (error) {
         console.error('Failed to fetch books:', error);
-        props.setIsNotificationActive(true);
-        props.setNotificationMessage('Could not load books. Please refresh and try again.');
+        notify('Could not load books. Please refresh and try again.', 'error');
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -39,37 +41,43 @@ function PublishPage(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Function to handle card selection
-  const handleCardClick = (id) => {
-    const updatedBooks = books.map(book => {
-      return {
-        ...book,
-        selected: book.id === id ? !book.selected : false
-      };
-    });
-    setBooks(updatedBooks);
-  };
-
   const handleDeleteBook = (bookId) => {
-    const updatedBooks = books.filter(book => book.id !== bookId);
-    setBooks(updatedBooks);
+    setBooks((current) => current.filter(book => book.id !== bookId));
   };
 
   return (
-    <>
-      <h1>Download Book</h1>
+    <section>
+      <header className={chrome.pageHead}>
+        <h1 className={chrome.pageTitle}>Books</h1>
+        <p className={chrome.pageSub}>
+          Every book you assemble from drawings lands here. Download the
+          print-ready PDF, or delete drafts you no longer need.
+        </p>
+      </header>
 
-      <div className={styles.main}>
+      {isLoading ? (
+        <div className={chrome.skeletonGrid} aria-hidden="true">
+          {Array.from({ length: 4 }, (_, i) => (
+            <Skeleton key={i} height={300} radius={12} />
+          ))}
+        </div>
+      ) : books.length === 0 ? (
+        <div className={chrome.emptyState}>
+          <p className={chrome.emptyTitle}>No books yet</p>
+          <p className={chrome.emptyText}>
+            Pick drawings on the Drawings tab and press “Create book” to make
+            your first one.
+          </p>
+        </div>
+      ) : (
         <BooksGrid
-          books={books} handleCardClick={handleCardClick}
-          setIsNotificationActive={props.setIsNotificationActive}
-          setNotificationMessage={props.setNotificationMessage}
+          books={books}
+          notify={notify}
           handleDeleteBook={handleDeleteBook}
-          isSponsor={false}
-          onDownload={props.onDownload}
+          onDownload={onDownload}
         />
-      </div>
-    </>
+      )}
+    </section>
   );
 }
 

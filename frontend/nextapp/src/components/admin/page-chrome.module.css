@@ -1,0 +1,63 @@
+/* Shared chrome for admin dashboard tabs: page headings and empty states. */
+
+.pageHead {
+  margin-bottom: 1.75rem;
+}
+
+.pageTitle {
+  font-family: var(--font-fredoka), sans-serif;
+  font-size: clamp(1.5rem, 3vw, 1.9rem);
+  font-weight: 600;
+  color: var(--ink);
+  /* crayon underline, same as the public section titles */
+  display: table;
+  background-image: linear-gradient(
+    100deg,
+    transparent 1%,
+    #96f2d7 5%,
+    #63e6be 55%,
+    #96f2d7 95%,
+    transparent 99%
+  );
+  background-size: 100% 0.35em;
+  background-position: 0 95%;
+  background-repeat: no-repeat;
+  padding-bottom: 0.25em;
+}
+
+.pageSub {
+  margin-top: 0.5rem;
+  color: #4a4a52;
+  line-height: 1.6;
+  max-width: 42rem;
+}
+
+.emptyState {
+  background: #fff;
+  border: 2px dashed #b9b9c0;
+  border-radius: 14px;
+  padding: 3rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  text-align: center;
+}
+
+.emptyTitle {
+  font-family: var(--font-fredoka), sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.emptyText {
+  color: #4a4a52;
+  margin-bottom: 0.75rem;
+}
+
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1rem;
+}

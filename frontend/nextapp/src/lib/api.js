@@ -49,4 +49,6 @@ export const generateBook = (id) => api.post("/api/generate_book", { id });
 
 export const sponsorPay = (formData) => api.post("/api/sponsor_pay", formData);
 
+export const requestSchool = (data) => api.post("/api/school_request", data);
+
 export default api;

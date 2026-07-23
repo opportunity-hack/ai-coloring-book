@@ -25,6 +25,11 @@ export function trackSchoolNotListed(school) {
   trackEvent("school_not_listed_used", { school });
 }
 
+// The add-school form is the strongest expansion signal we have.
+export function trackSchoolRequestSubmitted({ school, state }) {
+  trackEvent("school_request_submitted", { school, state });
+}
+
 export function trackSponsorCheckoutStarted({ booksCount, value }) {
   trackEvent("sponsor_checkout_started", {
     books_count: booksCount,
