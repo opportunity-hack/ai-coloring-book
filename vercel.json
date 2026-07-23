@@ -1,0 +1,5 @@
+{
+  "installCommand": "cd frontend/nextapp && npm install",
+  "buildCommand": "cd frontend/nextapp && npm run build",
+  "outputDirectory": "frontend/nextapp/.next"
+}
