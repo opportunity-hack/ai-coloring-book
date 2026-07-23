@@ -29,7 +29,8 @@ resend.api_key = os.getenv("RESEND_EMAIL_KEY")
 # dashboard. notify.susieqsbooks.org is the verified sending domain; ADMIN_EMAIL
 # (which may be any inbox, e.g. a personal Gmail address) is only used as the
 # recipient/reply-to address, never as the "from" address.
-RESEND_FROM_EMAIL = os.getenv("RESEND_FROM_EMAIL", "Susie Q's Coloring Book <noreply@notify.susieqsbooks.org>")
+DEFAULT_RESEND_FROM_EMAIL = "Susie Q's Coloring Book <noreply@notify.susieqsbooks.org>"
+RESEND_FROM_EMAIL = os.getenv("RESEND_FROM_EMAIL", DEFAULT_RESEND_FROM_EMAIL)
 UserModel = get_user_model()
 
 NPO_URLS = ['https://shorturl.at/lz457'] * 11
