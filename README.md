@@ -1,6 +1,7 @@
 # From Sketches to Smiles: A Coloring Book that Gives Back
 Deployed at [susieqsbooks.org](https://susieqsbooks.org/) — frontend on [Vercel](https://vercel.com), backend API on [fly.io](https://fly.io) at `api.susieqsbooks.org`.
 
+
 ## Inspiration
 The **From Sketches to Smiles Project** aims to create an exceptional coloring book by harnessing the creativity of children's sketches and the power of AI. Our mission extends beyond just producing amazing coloring books; we also have a strong commitment to giving back to our community, especially kids in need, through [SusieQ's](https://www.ohack.dev/nonprofit/gU9c6wuE1gI8R5IpuUCx) Kids Comfort Bag program.
 
