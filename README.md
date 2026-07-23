@@ -105,6 +105,9 @@ SMTP_PORT=465
 REPLICATE_TOKEN=<Token from Replicate AI that is used to generate images>
 
 RESEND_EMAIL_KEY=<Resend Email key used to send Emails>
+# "From" address used by Resend; must use a domain verified at
+# https://resend.com/domains (notify.susieqsbooks.org is the verified domain).
+RESEND_FROM_EMAIL=<From address, e.g. "Susie Q's Coloring Book <noreply@notify.susieqsbooks.org>">
 
 # AWS
 AWS_BUCKET=suzie-kids-prod
