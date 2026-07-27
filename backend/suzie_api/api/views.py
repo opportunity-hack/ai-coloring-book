@@ -66,19 +66,26 @@ class CreateDrawingsViewSet(viewsets.ModelViewSet):
 
         raw_sketch = request.data["image"]
         subject = request.data["subject"]
-        prompt = f"{subject} as simple coloring book page"
+        prompt = (
+            f"Convert this child's drawing of {subject} into a coloring book page: "
+            "clean smooth black outlines on a pure white background, no color, "
+            "no shading, no gray fills. Keep the original composition and shapes "
+            "exactly as drawn."
+        )
 
         uploader = S3Handler(os.getenv("AWS_BUCKET"))
         ts = int(datetime.datetime.now().timestamp())
 
         raw_sketch.file.seek(0)
         file_content = raw_sketch.file.read()
-        # copy_of_file = BytesIO(file_content)
-        # copy_of_file.seek(0)
 
         creative_url = uploader.upload_file_to_s3(BytesIO(file_content), f'raw_sketch/{ts}.jpg')
 
-        processed_sketch = self.convert_file_to_color_book_sketch(raw_sketch.file, prompt)
+        # Fresh copy for Replicate: the S3 upload above consumed raw_sketch.file,
+        # and the client needs a filename to pick the right mime type.
+        sketch_copy = BytesIO(file_content)
+        sketch_copy.name = getattr(raw_sketch, "name", None) or "drawing.jpg"
+        processed_sketch = self.convert_file_to_color_book_sketch(sketch_copy, prompt)
         ai_creative_url = uploader.upload_url_to_s3(processed_sketch, f'ai/{ts}.jpg')
 
         sanitized_data = {
@@ -97,19 +104,19 @@ class CreateDrawingsViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def convert_file_to_color_book_sketch(self, raw_sketch, prompt) -> str:
-        client = replicate.Client(os.getenv("REPLICATE_TOKEN"))
-        output = client.run(
-            "jagilley/controlnet-scribble:435061a1b5a4c1e26740464bf786efdfa9cb3a3ac488595a2de23e143fdb0117",
-            input={"image": raw_sketch,
-                   "prompt": prompt,
-                   "ddim_steps": 20,
-                   "scale": 8,
-                   "a_prompt": "best quality, line sketch, outlines only, black and white",
-                   "n_prompt": "solid fills, incomplete shapes"}
+        client = replicate.Client(api_token=os.getenv("REPLICATE_TOKEN"))
+        # flux-kontext-pro is an official always-on Replicate model: no version
+        # hash, no cold boots, flat per-image pricing, single-URL output.
+        return client.run(
+            "black-forest-labs/flux-kontext-pro",
+            input={
+                "input_image": raw_sketch,
+                "prompt": prompt,
+                "aspect_ratio": "match_input_image",
+                "output_format": "png",
+            },
+            use_file_output=False,  # upload_url_to_s3 expects a plain URL string
         )
-        raw_img, ai_generated = output
-        # ai_generated = "https://pbxt.replicate.delivery/slwfP9Un21TMfUDIupiu3tEMhGlaSkegDjF6xX2SDWl6flvGB/output_1.png"
-        return ai_generated
 
 
 class NonProfitsViewSet(viewsets.ModelViewSet):

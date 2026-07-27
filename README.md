@@ -153,7 +153,7 @@ Here's an overview of the components used:
 The backend solution includes:
 - Django
 - PostgresSQL
-- Model to convert scribbles to sketches: ControlNet (Modified Diffusion Model)
+- Model to convert scribbles to sketches: FLUX.1 Kontext Pro (originally ControlNet-scribble)
 - Model hosting platform: Replicate
 
 The frontend solution includes:
