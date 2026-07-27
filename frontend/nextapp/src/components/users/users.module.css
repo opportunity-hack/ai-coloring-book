@@ -1,15 +1,57 @@
+.layout {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+}
+
+.listColumn {
+    flex: 1;
+    min-width: 0;
+}
+
+.tableCard {
+    background: #fff;
+    border: 2px solid var(--ink);
+    border-radius: 14px;
+    overflow-x: auto;
+}
+
+.emailCell {
+    font-weight: 600;
+    color: var(--ink);
+    word-break: break-all;
+}
+
 .card {
     background: #fff;
     border: 2px solid var(--ink);
     border-radius: 14px;
     padding: 1.75rem 1.5rem;
-    max-width: 460px;
+    width: 100%;
+    max-width: 380px;
     display: flex;
     flex-direction: column;
     gap: 0.9rem;
 }
 
+.formTitle {
+    font-family: var(--font-fredoka), sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--ink);
+}
+
 .submit {
     align-self: flex-start;
     margin-top: 0.25rem;
+}
+
+@media (max-width: 900px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    .card {
+        max-width: 460px;
+    }
 }
