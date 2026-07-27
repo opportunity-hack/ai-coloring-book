@@ -1,6 +1,6 @@
 # AI Coloring Book (susieqsbooks.org)
 
-Kids upload drawings → AI (Replicate ControlNet-scribble) turns them into
+Kids upload drawings → AI (Replicate FLUX.1 Kontext Pro) turns them into
 coloring-book pages → local sponsors pay via PayPal for logo placement →
 admin generates the printed-book PDF. Part fundraiser, part classroom
 activity for the nonprofit Susie Q's Kids. Serves Warren/Sterling Heights MI
@@ -50,8 +50,9 @@ and greater Phoenix AZ.
   known follow-up; never copy those values anywhere.
 - Prod log "You did not pass a valid authentication token" = Replicate 401
   (bad `REPLICATE_TOKEN` fly secret; 500s `/api/upload_drawings/`), not Django auth.
-- `/api/upload_drawings/` blocks the request on Replicate (30–120s on cold
-  boot) — gunicorn `--timeout 180` in the backend Dockerfile must stay ≥ that;
-  moving generation async (Replicate webhooks) is the durable fix.
+- `/api/upload_drawings/` blocks the request on Replicate (flux-kontext-pro
+  is always-on, typically 5–15s, but slow runs happen) — keep gunicorn
+  `--timeout 180` in the backend Dockerfile as headroom; moving generation
+  async (Replicate webhooks) is still the durable fix.
 - `frontend/nextapp/Dockerfile` + `fly.toml` are legacy; delete after the
   susieqsbooks.org DNS cutover to Vercel is verified.
