@@ -96,12 +96,23 @@ class UserLoginSerializer(serializers.Serializer):
 
 
 class UserListSerializer(serializers.ModelSerializer):
+    # Sponsors keep their organization on the Sponsors table, not the user row.
+    organization = serializers.SerializerMethodField()
+
     class Meta:
-        model = settings.AUTH_USER_MODEL
+        model = UserModel
         fields = (
+            'id',
             'email',
-            'role'
+            'role',
+            'school',
+            'organization',
+            'date_joined'
         )
+
+    def get_organization(self, obj):
+        sponsor = obj.sponsors_set.first()
+        return sponsor.name if sponsor else None
 
 
 class DrawingsGetSerializer(serializers.ModelSerializer):

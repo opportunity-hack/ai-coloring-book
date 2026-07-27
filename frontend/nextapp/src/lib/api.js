@@ -33,6 +33,8 @@ export const login = (email, password) =>
 
 export const registerUser = (data) => api.post("/api/register", data);
 
+export const getUsers = () => api.get("/api/users");
+
 export const getDrawings = () => api.get("/api/drawings/");
 
 // FormData: let axios set the multipart boundary itself.
