@@ -13,9 +13,9 @@ vi.mock("@/lib/api", () => ({
 const USERS_RESPONSE = {
   data: {
     users: [
-      { id: 1, email: "mary@susieqskids.org", role: 1, school: null, organization: null, date_joined: "2024-02-16T12:00:00" },
-      { id: 9, email: "teacher@susick.org", role: 3, school: "Margaret I. Susick Elementary School", organization: null, date_joined: "2026-07-23T12:00:00" },
-      { id: 12, email: "owner@warrenpizza.com", role: 2, school: null, organization: "Warren Pizza Co.", date_joined: "2026-07-01T12:00:00" },
+      { id: 1, email: "mary@susieqskids.org", role: 1, school: null, organization: null, date_joined: "2024-02-16T12:00:00", last_login: "2026-07-26T12:00:00" },
+      { id: 9, email: "teacher@susick.org", role: 3, school: "Margaret I. Susick Elementary School", organization: null, date_joined: "2026-07-23T12:00:00", last_login: null },
+      { id: 12, email: "owner@warrenpizza.com", role: 2, school: null, organization: "Warren Pizza Co.", date_joined: "2026-07-01T12:00:00", last_login: "2026-07-02T12:00:00" },
     ],
   },
 };
@@ -37,6 +37,16 @@ describe("Users", () => {
     expect(screen.getAllByText("Sponsor").length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText("Margaret I. Susick Elementary School")).toBeInTheDocument();
     expect(screen.getByText("Warren Pizza Co.")).toBeInTheDocument();
+  });
+
+  it("shows last login as relative time, or Never for accounts that haven't signed in", async () => {
+    render(<Users notify={vi.fn()} />);
+
+    await screen.findByText("mary@susieqskids.org");
+    expect(screen.getByText("Last login")).toBeInTheDocument();
+    expect(screen.getByText("Never")).toBeInTheDocument();
+    // Relative dates like "a day ago" / "5 days ago" — assert the suffix.
+    expect(screen.getAllByText(/ago$/).length).toBeGreaterThanOrEqual(2);
   });
 
   it("notifies when the list cannot load", async () => {

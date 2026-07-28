@@ -7,7 +7,7 @@ import chrome from '@/components/admin/page-chrome.module.css';
 import { getUsers, registerUser } from '@/lib/api';
 import { ROLES } from '@/lib/auth';
 import { SCHOOL_GROUPS } from '@/data/schools';
-import { formatShortDate } from '@/lib/dates';
+import { formatBookDate, formatRelativeDate, formatShortDate } from '@/lib/dates';
 
 const ROLE_OPTIONS = {
     'Admin': ROLES.ADMIN,
@@ -114,6 +114,7 @@ export default function Users({ notify }) {
                             <Table.Th>Email</Table.Th>
                             <Table.Th>Role</Table.Th>
                             <Table.Th>School / organization</Table.Th>
+                            <Table.Th>Last login</Table.Th>
                             <Table.Th>Added</Table.Th>
                         </Table.Tr>
                     </Table.Thead>
@@ -129,6 +130,15 @@ export default function Users({ notify }) {
                                         </Badge>
                                     </Table.Td>
                                     <Table.Td>{user.school || user.organization || '—'}</Table.Td>
+                                    <Table.Td>
+                                        {user.last_login ? (
+                                            <span title={formatBookDate(user.last_login)}>
+                                                {formatRelativeDate(user.last_login)}
+                                            </span>
+                                        ) : (
+                                            <span className={styles.never}>Never</span>
+                                        )}
+                                    </Table.Td>
                                     <Table.Td>
                                         {user.date_joined ? formatShortDate(user.date_joined) : '—'}
                                     </Table.Td>

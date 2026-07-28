@@ -107,7 +107,8 @@ class UserListSerializer(serializers.ModelSerializer):
             'role',
             'school',
             'organization',
-            'date_joined'
+            'date_joined',
+            'last_login'
         )
 
     def get_organization(self, obj):

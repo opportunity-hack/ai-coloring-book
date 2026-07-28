@@ -22,6 +22,11 @@
     word-break: break-all;
 }
 
+.never {
+    color: #a5a5ad;
+    font-style: italic;
+}
+
 .card {
     background: #fff;
     border: 2px solid var(--ink);

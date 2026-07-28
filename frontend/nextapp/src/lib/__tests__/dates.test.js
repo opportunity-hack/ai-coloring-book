@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { formatBookDate, formatShortDate } from "@/lib/dates";
+import { formatBookDate, formatRelativeDate, formatShortDate } from "@/lib/dates";
 
 describe("formatBookDate", () => {
   it("formats an ISO UTC timestamp into a friendly local date", () => {
@@ -13,5 +13,11 @@ describe("formatShortDate", () => {
   it("formats an ISO UTC timestamp into a short local date", () => {
     const formatted = formatShortDate("2024-04-06T12:00:00");
     expect(formatted).toMatch(/^[A-Z][a-z]{2} \d{1,2}, 2024$/);
+  });
+});
+
+describe("formatRelativeDate", () => {
+  it("renders past timestamps relative to now", () => {
+    expect(formatRelativeDate("2024-04-06T12:00:00")).toMatch(/ago$/);
   });
 });
